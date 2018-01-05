@@ -37,12 +37,18 @@ public class HomeController extends Controller {
 
         if (loginUser != null) {
             if (loginUser.password.equals(loginPassword)) {
+                session("connected", loginUsername);
                 return ok(logged_in.render("Logged in successfully!"));
             } else {
                 return ok(logged_in.render("Check your password!"));
             }
         }
         return ok(logged_in.render("Not granted!"));
+    }
+
+    public Result logout() {
+        session().remove("connected");
+        return ok(home.render());
     }
 
     public Result registerSubmit() {
@@ -91,9 +97,13 @@ public class HomeController extends Controller {
     }
 
     public Result getAllUsers() {
-        Users oz = Users.find.byId(2L);
-
-        return ok(users.render(oz.name));
+        Users adminUser = Users.find.byId(1L);
+        String user = session("connected");
+        if(user != null) {
+            return ok(users.render(adminUser.name));
+        } else {
+            return unauthorized("Oops, you are not authorized!");
+        }
     }
 
 }
