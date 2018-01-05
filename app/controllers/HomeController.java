@@ -2,7 +2,7 @@ package controllers;
 
 import com.google.inject.Inject;
 import io.ebean.Ebean;
-import models.User;
+import models.Reader;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.FormFactory;
@@ -35,7 +35,7 @@ public class HomeController extends Controller {
 
     public Result home() {
         Ebean.execute(() -> {
-            User user = new User();
+            Reader user = new Reader();
             user.name = "oz";
             user.id = 2L;
             user.password = "123";
@@ -49,7 +49,7 @@ public class HomeController extends Controller {
         return  ok(home.render());}
 
         public Result getAllUsers() {
-            User oz = User.find.byId(2L);
+            Reader oz = Reader.find.byId(2L);
 
             return ok(users.render(oz.name));
         }

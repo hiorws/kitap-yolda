@@ -3,15 +3,15 @@
 
 # --- !Ups
 
-create table user (
-  id                            bigint auto_increment not null,
+create table reader (
+  id                            bigserial not null,
   name                          varchar(255),
   password                      varchar(255),
-  constraint pk_user primary key (id)
+  constraint pk_reader primary key (id)
 );
 
 
 # --- !Downs
 
-drop table if exists user;
+drop table if exists reader cascade;
 
