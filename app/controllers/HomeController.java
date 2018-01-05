@@ -1,7 +1,13 @@
 package controllers;
 
-import play.mvc.*;
-
+import com.google.inject.Inject;
+import io.ebean.Ebean;
+import models.User;
+import play.Logger;
+import play.data.DynamicForm;
+import play.data.FormFactory;
+import play.mvc.Controller;
+import play.mvc.Result;
 import views.html.*;
 
 /**
@@ -10,12 +16,41 @@ import views.html.*;
  */
 public class HomeController extends Controller {
 
+    @Inject
+    FormFactory formFactory;
+
     /**
      * An action that renders an HTML page with a welcome message.
      * The configuration in the <code>routes</code> file means that
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
      */
+    public Result loginSubmit() {
 
-    public Result home() { return  ok(home.render());}
+        DynamicForm dynamicForm = formFactory.form().bindFromRequest();
+        Logger.info("Username is: " + dynamicForm.get("username"));
+        Logger.info("Password is: " + dynamicForm.get("password"));
+
+        return  ok(logged_in.render("hey"));}
+
+    public Result home() {
+        Ebean.execute(() -> {
+            User user = new User();
+            user.name = "oz";
+            user.id = 2L;
+            user.password = "123";
+            // code running in "REQUIRED" transactional scope
+            // ... as "REQUIRED" is the default TxType
+            System.out.println(Ebean.currentTransaction());
+            user.save();
+        });
+
+
+        return  ok(home.render());}
+
+        public Result getAllUsers() {
+            User oz = User.find.byId(2L);
+
+            return ok(users.render(oz.name));
+        }
 }
