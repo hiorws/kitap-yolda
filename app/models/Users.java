@@ -8,17 +8,23 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Reader extends Model {
+public class Users extends Model {
 
     @Id
     public Long id;
 
     @Constraints.Required
-    public String name;
+    public String username;
 
     @Constraints.Required
     public String password;
 
-    public static final Finder<Long, Reader> find = new Finder<>(Reader.class);
+    @Constraints.Required
+    public String name;
+
+    @Constraints.Required
+    public String email;
+
+    public static final Finder<Long, Users> find = new Finder<>(Users.class);
 
 }

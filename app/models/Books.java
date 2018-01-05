@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import java.sql.Date;
 
 @Entity
-public class Book extends Model {
+public class Books extends Model {
 
     @Id
     public Long id;
@@ -26,12 +26,12 @@ public class Book extends Model {
     public String author;
 
     @Constraints.Required
-    public Reader adder;
+    public Users adder;
 
     @Constraints.Required
     public Date additionDate;
 
-    public Book(@Constraints.Required String name, @Constraints.Required boolean isAvailable, @Constraints.Required String author, @Constraints.Required Reader adder, @Constraints.Required Date additionDate) {
+    public Books(@Constraints.Required String name, @Constraints.Required boolean isAvailable, @Constraints.Required String author, @Constraints.Required Users adder, @Constraints.Required Date additionDate) {
         this.name = name;
         this.isAvailable = isAvailable;
         this.author = author;
