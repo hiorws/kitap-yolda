@@ -82,12 +82,22 @@ public class BookController extends Controller {
         return redirect(routes.HomeController.me());
     }
 
+    private boolean checkIfAlreadyWished(Books book){
+
+        Users currentUser = sessionController.findUserWithSession("connected");
+        Query<Transitions> query = Ebean.createQuery(Transitions.class);
+        List<Transitions> transitions = query.where(
+                Expr.and(Expr.eq("wisher", currentUser),
+                        Expr.eq("book", book))).findList();
+        return transitions.size() < 1;
+    }
+
 
     public Result getBookPage(Long bookID){
         Books book = Books.find.byId(bookID);
 
         if(book != null){
-            return ok(bookinfo.render(book, sessionController.findUserWithSession("connected")));
+            return ok(bookinfo.render(book, sessionController.findUserWithSession("connected"), checkIfAlreadyWished(book)));
         }
         else{
             return ok(home.render());
