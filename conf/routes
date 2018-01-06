@@ -14,7 +14,7 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /                           controllers.HomeController.home
 
 POST    /login                      controllers.HomeController.loginSubmit
-GET    /login                      controllers.HomeController.loginSubmit
+GET     /login                      controllers.HomeController.loginSubmit
 
 GET     /logout                     controllers.HomeController.logout
 POST    /signin                     controllers.HomeController.registerSubmit
@@ -23,3 +23,5 @@ GET     /users                      controllers.HomeController.getAllUsers
 GET     /setup                      controllers.HomeController.setup
 GET     /books                      controllers.BookController.listBooks
 POST    /add                        controllers.BookController.addBookForm
+
+GET     /books/:id                  controllers.BookController.getBookPage(id: Long)

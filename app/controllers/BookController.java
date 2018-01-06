@@ -9,7 +9,8 @@ import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.books;
-import views.html.logged_in;
+import views.html.home;
+import views.html.*;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import java.util.List;
 public class BookController extends Controller {
     @Inject
     FormFactory formFactory;
+
     public void addBook(String bookName, Users bookAdder, String bookAuthor, Boolean bookAvailable, String bookIsbn) {
         Books newBook = new Books();
         newBook.name = bookName;
@@ -33,7 +35,7 @@ public class BookController extends Controller {
 
     public void deleteBook(Long bookId) {
         Books deletedBook = Books.find.byId(bookId);
-        if(deletedBook != null){
+        if (deletedBook != null) {
             deletedBook.delete();
             deletedBook.save();
         }
@@ -44,7 +46,8 @@ public class BookController extends Controller {
         List<Books> booksList = Books.find.all();
         return ok(books.render(booksList));
     }
-    public Result addBookForm(){
+
+    public Result addBookForm() {
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
         String bookAvailable = dynamicForm.get("book_available");
         String bookAuthor = dynamicForm.get("book_author");
@@ -54,15 +57,25 @@ public class BookController extends Controller {
         Logger.info(bookAvailable);
 
         String user = session("connected");
-        Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
-        if(loginUser!= null){
-            if(bookAvailable == null){
-                addBook(bookName,loginUser,bookAuthor,false,bookIsbn);
-            }
-            else{
-                addBook(bookName,loginUser,bookAuthor,true,bookIsbn);
+        Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
+        if (loginUser != null) {
+            if (bookAvailable == null) {
+                addBook(bookName, loginUser, bookAuthor, false, bookIsbn);
+            } else {
+                addBook(bookName, loginUser, bookAuthor, true, bookIsbn);
             }
         }
         return ok(logged_in.render(loginUser));
     }
+
+    public Result getBookPage(Long bookID){
+        Books book = Books.find.byId(bookID);
+        if(book != null){
+            return ok(bookinfo.render(book));
+        }
+        else{
+            return ok(home.render());
+        }
+    }
+
 }

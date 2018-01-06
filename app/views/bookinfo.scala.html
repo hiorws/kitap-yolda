@@ -1,0 +1,51 @@
+@(book: Books)
+
+@main("Book") {
+    <style>
+            .avaliable {
+                color: green;
+            }
+
+            .not_available {
+                color: red;
+            }
+    </style>
+
+    <div class="container">
+        <h2>Kitap Bilgileri</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Kitabın Adı</th>
+                    <th>Yazarı</th>
+                    <th>ISBN</th>
+                    <th>Ekleyen</th>
+                    <th>Eklenme Tarihi</th>
+                    <th>Uygunluk</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>@book.name</td>
+                    <td>@book.author</td>
+                    <td>@book.ISBN</td>
+                    <td>@book.adder.name</td>
+                    <td>@book.additionDate</td>
+                    @{
+                        if(book.isAvailable) {
+                                <td bgcolor="#00FF00">Uygun.</td>
+
+                        }
+                        else {
+                                <td bgcolor="#FF0000">Uygun değil.</td>
+
+                        }
+                    }
+                </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+}
