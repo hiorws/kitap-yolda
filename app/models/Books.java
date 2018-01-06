@@ -5,15 +5,14 @@ import io.ebean.Finder;
 import io.ebean.Model;
 import play.data.validation.Constraints;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 public class Books extends Model {
 
     @Id
+    @Column(name = "book_index")
     public Long id;
 
     @Optional
@@ -28,7 +27,7 @@ public class Books extends Model {
     @Constraints.Required
     public String author;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Users.class)
     public Users adder;
 
     @Constraints.Required

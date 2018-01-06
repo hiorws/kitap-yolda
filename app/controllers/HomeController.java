@@ -37,6 +37,7 @@ public class HomeController extends Controller {
                     Logger.info("Username is: " + loginUsername);
                     Logger.info("Password is: " + loginPassword);
                     sessionController.setSession("connected", loginUser.id.toString());
+
                     return ok(logged_in.render(loginUser));
                 } else {
                     Logger.info("Username is: " + loginUsername);

@@ -7,7 +7,6 @@ import models.Books;
 import models.Users;
 import play.Logger;
 import play.data.DynamicForm;
-import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -39,6 +38,7 @@ public class BookController extends Controller {
         newBook.additionDate = LocalDate.now();
         Logger.info(newBook.ISBN);
         newBook.save();
+
     }
 
     public void deleteBook(Long bookId) {

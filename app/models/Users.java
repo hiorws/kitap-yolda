@@ -4,13 +4,14 @@ import io.ebean.Finder;
 import io.ebean.Model;
 import play.data.validation.Constraints;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Users extends Model {
 
     @Id
+    @Column(name="users_id")
     public Long id;
 
     @Constraints.Required
@@ -24,6 +25,9 @@ public class Users extends Model {
 
     @Constraints.Required
     public String email;
+
+    @OneToMany(targetEntity = Books.class, cascade = CascadeType.ALL, mappedBy = "adder")
+    public List<Books> books;
 
     public static final Finder<Long, Users> find = new Finder<>(Users.class);
 
