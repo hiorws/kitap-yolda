@@ -26,3 +26,4 @@ GET     /books/id/:id               controllers.BookController.getBookPage(id: L
 POST    /books                      controllers.BookController.searchBook
 GET     /show-filter/:searchBook    controllers.BookController.showFilter(searchBook: String)
 POST    /wish-book                  controllers.BookController.wishBook()
+POST    /delete-wish                controllers.BookController.takeBackWish()

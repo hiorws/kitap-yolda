@@ -137,6 +137,7 @@ public class BookController extends Controller {
         List<Books> bookList = query.findList();
         return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
     }
+
     public Result wishBook(){
         Users currentUser = sessionController.findUserWithSession("connected");
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
@@ -147,9 +148,26 @@ public class BookController extends Controller {
         transition.wishDate = LocalDate.now();
         transition.save();
         return redirect(routes.HomeController.me());
-
     }
 
+    public Result takeBackWish() {
+        Users currentUser = sessionController.findUserWithSession("connected");
+        DynamicForm dynamicForm = formFactory.form().bindFromRequest();
+        String bookId = dynamicForm.get("book_id");
+
+        Books searchBook = Books.find.byId(Long.parseLong(bookId));
+        Query<Transitions> query = Ebean.createQuery(Transitions.class);
+        List<Transitions> transitionsList = query.where(
+                    Expr.and(Expr.eq("wisher", currentUser),
+                    Expr.eq("book", searchBook))).findList();
+
+        for(Transitions t: transitionsList){
+            t.delete();
+        }
+
+
+        return redirect(routes.HomeController.me());
+    }
 
 
 }
