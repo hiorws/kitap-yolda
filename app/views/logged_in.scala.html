@@ -51,8 +51,8 @@
                                 <tbody id="items">
                                 @for(book <- user.books) {
                                     <tr data-toggle="collapse" data-target="#@jsFileWithExtension(book.id)" class="accordion-toggle ">
-                                        <td>@book.name</td>
-                                        <td>@book.author</td>
+                                        <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</td>
+                                        <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</td>
                                         <td>@book.ISBN</td>
                                         <td>@book.additionDate</td>
                                         <td>@book.isAvailable</td>
