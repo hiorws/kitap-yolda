@@ -143,10 +143,13 @@ public class BookController extends Controller {
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
         String bookId = dynamicForm.get("book_id");
         Transitions transition = new Transitions();
-        transition.book.add(Books.find.byId(Long.parseLong(bookId)));
-        transition.wisher.add(Users.find.byId(currentUser.id));
-        transition.wishDate = LocalDate.now();
-        transition.save();
+        Books wishedBook = Books.find.byId(Long.parseLong(bookId));
+        if(!currentUser.books.contains(wishedBook)){
+            transition.book.add(wishedBook);
+            transition.wisher.add(Users.find.byId(currentUser.id));
+            transition.wishDate = LocalDate.now();
+            transition.save();
+        }
         return redirect(routes.HomeController.me());
     }
 

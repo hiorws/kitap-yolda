@@ -59,9 +59,10 @@
                     @CSRF.formField
                     @{
                     if(book.isAvailable && notWishedYet){
-                            <input type="submit" name="wish-submit" id="wish-form"  class="btn btn-block btn-success active" value="İste">
-                            </input>
-
+                        if(book.adder.id != user.id) {
+                                <input type="submit" name="wish-submit" id="wish-form"  class="btn btn-block btn-success active" value="İste">
+                                </input>
+                        }
                     }
                     else{
                         if(notWishedYet){
@@ -76,9 +77,10 @@
                     @CSRF.formField
                     @{
                         if(book.isAvailable && !notWishedYet){
-                                <input type="submit" name="wish-submit" id="change-wish-form"  class="btn btn-block btn-warning active" value="Vazgeç">
-                                </input>
-
+                            if(book.adder.id != user.id) {
+                                    <input type="submit" name="wish-submit" id="change-wish-form" class="btn btn-block btn-warning active" value="Vazgeç">
+                                    </input>
+                            }
                         }
                     }
                     <input type="hidden" name="book_id" value="@book.id"></input>
