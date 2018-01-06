@@ -31,7 +31,9 @@
                 <ul class="nav nav-tabs" id="myTab">
                     <li class="active"><a href="#home" data-toggle="tab">Açıktaki Kitaplarım</a></li>
                     <li><a href="#messages" data-toggle="tab">İstekte Bulunduklarım</a></li>
+                    <li><a href="#from-me" data-toggle="tab">Benden İstenenler</a></li>
                     <li><a href="#settings" data-toggle="tab">Kitap Ekle</a></li>
+
                 </ul>
 
                 <div class="tab-content">
@@ -113,6 +115,33 @@
                                             <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
                                         </tr>
                                     }
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div><!--/tab-pane-->
+                    <div class="tab-pane" id="from-me">
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Kitap Adi</th>
+                                        <th>Yazari</th>
+                                        <th>Kitabin Ekleyen</th>
+                                        <th>Istegi Iptal Et</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="items">
+                                @for(transition <- transitions){
+                                    <tr>
+                                        <td>@transition.book.name</td>
+                                        <td>@transition.book.author</td>
+                                        <td>@transition.book.adder.name</td>
+                                        <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+                                    </tr>
+                                }
 
                                 </tbody>
                             </table>
