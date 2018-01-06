@@ -16,8 +16,13 @@ import java.util.List;
 
 public class HomeController extends Controller {
 
+    private SessionController sessionController;
     @Inject
     FormFactory formFactory;
+
+    public HomeController(){
+        sessionController = SessionController.getInstance();
+    }
 
     public Result loginSubmit() {
             if(request().method().equals("POST")){
@@ -31,7 +36,7 @@ public class HomeController extends Controller {
                 if (loginUser.password.equals(loginPassword)) {
                     Logger.info("Username is: " + loginUsername);
                     Logger.info("Password is: " + loginPassword);
-                    session("connected", loginUser.id.toString());
+                    sessionController.setSession("connected", loginUser.id.toString());
                     return ok(logged_in.render(loginUser));
                 } else {
                     Logger.info("Username is: " + loginUsername);
@@ -43,8 +48,8 @@ public class HomeController extends Controller {
 
             }
             else{
-                String user = session("connected");
-                Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
+
+                Users loginUser = sessionController.findUserWithSession("connected");
                 if(loginUser != null){
                     return ok(logged_in.render(loginUser));
                 }
@@ -56,7 +61,7 @@ public class HomeController extends Controller {
 
 
     public Result logout() {
-        session().remove("connected");
+        sessionController.removeSession("connected");
         return ok(home.render());
     }
 
@@ -74,7 +79,7 @@ public class HomeController extends Controller {
         Logger.info("Email is: " + registerEmail);
         Logger.info("Name is: " + registerName);
 
-        List<Users> userList = Ebean.find(Users.class).where().eq("id", registerName).findList();
+        List<Users> userList = Ebean.find(Users.class).where().eq("username", registerName).findList();
         if(userList.size() < 1){
             Users newUser = new Users();
             newUser.username = registerUsername;
@@ -83,7 +88,7 @@ public class HomeController extends Controller {
             newUser.name = registerName;
 
             newUser.save();
-            session("connected", newUser.id.toString());
+            sessionController.setSession("connected", newUser.id.toString());
             return ok(logged_in.render(newUser));
         }
         else{
@@ -132,8 +137,7 @@ public class HomeController extends Controller {
     }
 
     public Result home() {
-        String user = session("connected");
-        Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
+        Users loginUser = sessionController.findUserWithSession("connected");
         if(loginUser != null){
             return ok(logged_in.render(loginUser));
         }
@@ -143,10 +147,9 @@ public class HomeController extends Controller {
     }
 
     public Result getAllUsers() {
-        String user = session("connected");
-        Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
+        Users loginUser = sessionController.findUserWithSession("connected");
 
-        if(user != null) {
+        if(loginUser != null) {
             return ok(users.render(loginUser));
         } else {
             return unauthorized("Oops, you are not authorized!");

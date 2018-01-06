@@ -1,6 +1,5 @@
 package controllers;
 
-import io.ebean.Ebean;
 import models.Books;
 import models.Users;
 import play.Logger;
@@ -8,14 +7,23 @@ import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.*;
+import views.html.bookinfo;
+import views.html.books;
+import views.html.home;
+import views.html.logged_in;
+
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 
 public class BookController extends Controller {
+    private SessionController sessionController;
     @Inject
     FormFactory formFactory;
+
+    public BookController(){
+        sessionController = SessionController.getInstance();
+    }
     public void addBook(String bookName, Users bookAdder, String bookAuthor, Boolean bookAvailable, String bookIsbn) {
         Books newBook = new Books();
         newBook.name = bookName;
@@ -40,8 +48,7 @@ public class BookController extends Controller {
 
     public Result listBooks() {
         List<Books> booksList = Books.find.all();
-        String user = session("connected");
-        Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
+        Users loginUser = sessionController.findUserWithSession("connected");
         if(loginUser != null){
             return ok(books.render(booksList, loginUser));
         }
@@ -59,8 +66,7 @@ public class BookController extends Controller {
         Logger.info(bookIsbn);
         Logger.info(bookAvailable);
 
-        String user = session("connected");
-        Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
+        Users loginUser = sessionController.findUserWithSession("connected");
         if(loginUser!= null){
             if(bookAvailable == null){
                 addBook(bookName,loginUser,bookAuthor,false,bookIsbn);
@@ -74,8 +80,9 @@ public class BookController extends Controller {
 
     public Result getBookPage(Long bookID){
         Books book = Books.find.byId(bookID);
+
         if(book != null){
-            return ok(bookinfo.render(book));
+            return ok(bookinfo.render(book, sessionController.findUserWithSession("connected")));
         }
         else{
             return ok(home.render());
