@@ -1,7 +1,13 @@
-    @import helper._
-    @(user: Users)
+@import helper._
+@(user: Users)
+@jsFileWithExtension(id: Long) = @{
+    "demo" + id
+}
+@jsFileWithExtension2(id: Long) = @{
+    "edit" + id
+}
 
-    @main("Hey")(user){
+@main("Hey")(user) {
     <div class="container">
 
         <div class="row">
@@ -9,20 +15,22 @@
 
                 <ul class="list-group">
                     <li class="list-group-item text-muted">Profil</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>İsim</strong></span> @user.username</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Mail</strong></span> @user.email</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Paylaştığı Kitap Sayısı</strong></span>@user.books.size()</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        İsim</strong></span> @user.username</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        Mail</strong></span> @user.email</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        Paylaştığı Kitap Sayısı</strong></span>@user.books.size()</li>
 
                 </ul>
-
 
 
             </div><!--/col-3-->
             <div class="col-sm-9">
 
                 <ul class="nav nav-tabs" id="myTab">
-                    <li class="active"><a href="#home" data-toggle="tab">Ultimo Trattamento</a></li>
-                    <li><a href="#messages" data-toggle="tab">Cronologia Appuntamenti</a></li>
+                    <li class="active"><a href="#home" data-toggle="tab">Açıktaki Kitaplarım</a></li>
+                    <li><a href="#messages" data-toggle="tab">İstekte Bulunduklarım</a></li>
                     <li><a href="#settings" data-toggle="tab">Kitap Ekle</a></li>
                 </ul>
 
@@ -32,56 +40,46 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Data</th>
-                                        <th>Trattamento</th>
-                                        <th>Prodotti utilizzati</th>
-                                        <th>Colori utilizzati</th>
-                                        <th>Note</th>
-                                        <th>Modifica</th>
+                                        <th>Kitap Adi</th>
+                                        <th>Yazari</th>
+                                        <th>ISBN</th>
+                                        <th>Eklenme Tarihi</th>
+                                        <th>Uygunluk</th>
+                                        <th>Edit</th>
                                     </tr>
                                 </thead>
                                 <tbody id="items">
-                                    <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle ">
-                                        <td>10.05.2017</td>
-                                        <td>MASSAGGIO schiena</td>
-                                        <td>usato loreal</td>
-                                        <td>colore rosso</td>
-                                        <td>il cliente preferisce il verde</td>
-                                        <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
-                                        <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                                @for(book <- user.books) {
+                                    <tr data-toggle="collapse" data-target="#@jsFileWithExtension(book.id)" class="accordion-toggle ">
+                                        <td>@book.name</td>
+                                        <td>@book.author</td>
+                                        <td>@book.ISBN</td>
+                                        <td>@book.additionDate</td>
+                                        <td>@book.isAvailable</td>
+                                        <td><button type="button" data-toggle="modal" data-target="#@jsFileWithExtension2(book.id)" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+                                            <!-- <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td> -->
                                     </tr>
 
-                                    <tr>
-                                        <td colspan="12" class="hiddenRow"><div class="accordian-body collapse" id="demo1">
-                                            <table class="table table-striped">
-                                                <h1>Dettagli trattamento</h1>
-
-                                                <tbody>
-                                                    <tr id='addr0'>
-                                                        <td>
-
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" name='name0'  placeholder='Name' class="form-control"/>
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" name='mail0' placeholder='Mail' class="form-control"/>
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" name='mobile0' placeholder='Mobile' class="form-control"/>
-                                                        </td>
-                                                    </tr>
-                                                    <tr id='addr1'></tr>
-                                                </tbody>
-
-                                            </table>
-                                            <a id="add_row" class="btn btn-default pull-left">Aggiungi riga</a><a id='delete_row' class="pull-right btn btn-default">Elimina riga</a>
-
-                                        </div> </td>
-                                    </tr>
-
-
-
+                                    <div id="@jsFileWithExtension2(book.id)" class="modal fade" role="dialog">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                                    <h4 class="modal-title">Kitap Bilgilerini Duzenle</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input id="fn" type="text" class="form-control" value="@book.name" name="fname" placeholder="Kitap Adi">
+                                                    <input id="ln" type="text" class="form-control" value="@book.author" name="fname" placeholder="Yazar Ismi">
+                                                    <input id="mn" type="text" class="form-control" value="@book.isAvailable" name="fname" placeholder="Uygunluk">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" id="up" class="btn btn-success" data-dismiss="modal">Kaydet</button>
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Iptal</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                                 </tbody>
 
                             </table>
@@ -92,49 +90,26 @@
                             </div>
                         </div><!--/table-resp-->
 
-                        <div id="edit" class="modal fade" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">×</button>
-                                        <h4 class="modal-title">Modifica dati per (servizio)</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <input id="fn" type="text" class="form-control" name="fname" placeholder="Prodotti utilizzati">
-                                        <input id="ln" type="text" class="form-control" name="fname" placeholder="Colori Utilizzati">
-                                        <input id="mn" type="text" class="form-control" name="fname" placeholder="Note">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" id="up" class="btn btn-success" data-dismiss="modal">Aggiorna</button>
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
 
                     </div><!--/tab-pane-->
                     <div class="tab-pane" id="messages">
-
-                        <h2></h2>
 
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Data</th>
-                                        <th>Servizio</th>
-                                        <th>Modifica</th>
+                                        <th>Kitap Adi</th>
+                                        <th>Yazari</th>
+                                        <th>Kitabin Suanki Sahibi</th>
+                                        <th>Istegi Iptal Et</th>
                                     </tr>
                                 </thead>
                                 <tbody id="items">
                                     <tr>
-                                        <td>10.05.2017</td>
-                                        <td>MASSAGGIO schiena</td>
-
+                                        <td>Fareler ve Insanlar</td>
+                                        <td>Steinback</td>
+                                        <td>Kilimcinin Kor Oglu</td>
                                         <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
-
-
                                     </tr>
                                 </tbody>
                             </table>
@@ -187,6 +162,7 @@
             </div><!--/tab-content-->
 
         </div><!--/col-9-->
-    </div><!--/row-->
-</div>
+    </div>
+        <!--/row-->
+    </div>
 }
