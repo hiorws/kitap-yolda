@@ -13,7 +13,6 @@ import play.mvc.Result;
 import views.html.bookinfo;
 import views.html.books;
 import views.html.home;
-import views.html.logged_in;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
@@ -79,8 +78,9 @@ public class BookController extends Controller {
                 addBook(bookName,loginUser,bookAuthor,true,bookIsbn);
             }
         }
-        return ok(logged_in.render(loginUser));
+        return redirect(routes.HomeController.me());
     }
+
 
     public Result getBookPage(Long bookID){
         Books book = Books.find.byId(bookID);
@@ -95,12 +95,18 @@ public class BookController extends Controller {
     public Result searchBook(){
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
         String searchBook = dynamicForm.get("search_parameter");
+
+        return redirect(routes.BookController.showFilter(searchBook));
+    }
+
+    public Result showFilter(String searchBook){
         Query<Books> query = Ebean.createQuery(Books.class);
         query.where(
                 Expr.or(Expr.icontains("name", searchBook),
                         Expr.icontains("author", searchBook))
         );
         List<Books> bookList = query.findList();
+
         return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
     }
 

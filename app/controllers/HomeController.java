@@ -37,28 +37,26 @@ public class HomeController extends Controller {
                     Logger.info("Username is: " + loginUsername);
                     Logger.info("Password is: " + loginPassword);
                     sessionController.setSession("connected", loginUser.id.toString());
-
-                    return ok(logged_in.render(loginUser));
+                    Logger.info("here");
+                    return redirect(routes.HomeController.me());
                 } else {
-                    Logger.info("Username is: " + loginUsername);
-                    Logger.info("Password is: " + loginPassword);
+
                     return  ok(home.render());
                 }
             }
-                return ok(home.render());
-
-            }
-            else{
-
-                Users loginUser = sessionController.findUserWithSession("connected");
-                if(loginUser != null){
-                    return ok(logged_in.render(loginUser));
                 }
-                return ok(home.render());
+        return ok(home.render());
 
+    }
+
+        public Result me(){
+            Users loginUser = sessionController.findUserWithSession("connected");
+            if(loginUser != null){
+                return ok(logged_in.render(loginUser));
             }
-
+            return ok(home.render());
         }
+
 
 
     public Result logout() {
@@ -90,7 +88,8 @@ public class HomeController extends Controller {
 
             newUser.save();
             sessionController.setSession("connected", newUser.id.toString());
-            return ok(logged_in.render(newUser));
+            return redirect(routes.HomeController.me());
+            //return ok(logged_in.render(newUser));
         }
         else{
             return ok(home.render());
