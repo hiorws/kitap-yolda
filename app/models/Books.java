@@ -1,6 +1,7 @@
 package models;
 
 import com.typesafe.config.Optional;
+import io.ebean.Finder;
 import io.ebean.Model;
 import play.data.validation.Constraints;
 import javax.persistence.Entity;
@@ -31,6 +32,10 @@ public class Books extends Model {
     @Constraints.Required
     public Date additionDate;
 
+    public Books() {
+
+    }
+
     public Books(@Constraints.Required String name, @Constraints.Required boolean isAvailable, @Constraints.Required String author, @Constraints.Required Users adder, @Constraints.Required Date additionDate) {
         this.name = name;
         this.isAvailable = isAvailable;
@@ -38,4 +43,6 @@ public class Books extends Model {
         this.adder = adder;
         this.additionDate = additionDate;
     }
+
+    public static final Finder<Long, Books> find = new Finder<>(Books.class);
 }

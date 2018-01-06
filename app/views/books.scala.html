@@ -1,0 +1,7 @@
+@(bookList: List[Books])
+
+<ul>
+    @for(book <- bookList) {
+        <li>@book.name</li>
+    }
+</ul>

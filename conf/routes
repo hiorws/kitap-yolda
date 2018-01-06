@@ -19,3 +19,4 @@ POST    /signin                     controllers.HomeController.registerSubmit
 GET     /users                      controllers.HomeController.getAllUsers
 
 GET     /setup                      controllers.HomeController.setup
+GET     /books                      controllers.BookController.listBooks
