@@ -26,7 +26,7 @@ public class Users extends Model {
     @Constraints.Required
     public String email;
 
-    @OneToOne(mappedBy = "wisher")
+    @ManyToMany(mappedBy = "wisher")
     public Transitions transition;
 
     @OneToMany(targetEntity = Books.class, cascade = CascadeType.ALL, mappedBy = "adder")

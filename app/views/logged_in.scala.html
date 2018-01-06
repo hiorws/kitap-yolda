@@ -108,12 +108,14 @@
                                 </thead>
                                 <tbody id="items">
                                     @for(transition <- transitions){
-                                        <tr>
-                                            <td>@transition.book.name</td>
-                                            <td>@transition.book.author</td>
-                                            <td>@transition.book.adder.name</td>
-                                            <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
-                                        </tr>
+                                        @for(book <- transition.book ) {
+                                            <tr>
+                                                <td>@book.name</td>
+                                                <td>@book.author</td>
+                                                <td>@book.adder.name</td>
+                                                <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+                                            </tr>
+                                        }
                                     }
 
                                 </tbody>
@@ -135,12 +137,14 @@
                                 </thead>
                                 <tbody id="items">
                                 @for(transition <- transitions){
-                                    <tr>
-                                        <td>@transition.book.name</td>
-                                        <td>@transition.book.author</td>
-                                        <td>@transition.book.adder.name</td>
-                                        <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
-                                    </tr>
+                                    @for(book <- transition.book ) {
+                                        <tr>
+                                            <td>@book.name</td>
+                                            <td>@book.author</td>
+                                            <td>@book.adder.name</td>
+                                            <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+                                        </tr>
+                                    }
                                 }
 
                                 </tbody>

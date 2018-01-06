@@ -8,6 +8,7 @@ import play.data.validation.Constraints;
 import javax.persistence.*;
 import java.awt.print.Book;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Transitions extends Model {
@@ -16,14 +17,12 @@ public class Transitions extends Model {
     @Column(name = "transition_id")
     public Long id;
 
-    @OneToOne
-    @JoinColumn(name = "book_index")
-    public Books book;
+    @ManyToMany(cascade = CascadeType.ALL)
+    public List<Books> book;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @ManyToMany(cascade = CascadeType.ALL)
     @Constraints.Required
-    public Users wisher;
+    public List<Users> wisher;
 
     @Constraints.Required
     public boolean isArrived;

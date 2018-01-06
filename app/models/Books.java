@@ -30,7 +30,7 @@ public class Books extends Model {
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = Users.class)
     public Users adder;
 
-    @OneToOne(mappedBy = "book")
+    @ManyToMany(mappedBy = "book")
     public Transitions transition;
 
     @Constraints.Required
