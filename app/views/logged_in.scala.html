@@ -20,7 +20,7 @@
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
                         Mail</strong></span> @user.email</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        Paylaştığı Kitap Sayısı</strong></span>@user.books.size()</li>
+                        Paylaştığı Kitap Sayısı</strong></span><a href="@routes.BookController.getBooksByAdder(user.id)">@user.books.size()<a></li>
 
                 </ul>
 
