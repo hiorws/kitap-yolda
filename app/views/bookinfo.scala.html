@@ -1,51 +1,88 @@
 @(book: Books)(user: Users)
 
 @main("Book")(user) {
-    <style>
-            .avaliable {
-                color: green;
-            }
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/transition.css")">
 
-            .not_available {
-                color: red;
-            }
-    </style>
 
     <div class="container">
-        <h2>Kitap Bilgileri</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Kitabın Adı</th>
-                    <th>Yazarı</th>
-                    <th>ISBN</th>
-                    <th>Ekleyen</th>
-                    <th>Eklenme Tarihi</th>
-                    <th>Uygunluk</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="row">
+            <div class="col-md-3"><!--left col-->
+                <style>
+                        .available {
+                            color: green;
+                        }
 
-                <tr>
-                    <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</td>
-                    <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</td>
-                    <td>@book.ISBN</td>
-                    <td>@book.adder.name</td>
-                    <td>@book.additionDate</td>
-                    @{
-                        if(book.isAvailable) {
-                                <td bgcolor="#00FF00">Uygun.</td>
+                        .not_available {
+                            color: red;
+                        }
+                </style>
+                <h2>Kitap Bilgileri</h2>
+
+                <ul class="list-group">
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        Kitabın Adı</strong></span>@book.name</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        Kitabın Yazarı</strong></span><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></li>
+
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        Kitabı Ekleyen</strong></span>@book.adder.name</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        Kitabın Eklenme Tarihi</strong></span>@book.additionDate</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        Kitabın Uygunluk Durumu</strong></span>
+                        @{
+                            if(book.isAvailable) {
+                                    <span class="available">Uygun</span>
+
+                            }
+                            else {
+                                    <span class="not_available">Uygun Değil</span>
+
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        ISBN</strong></span> @{
+                        if(book.ISBN != null) {
+                                book.ISBN
 
                         }
                         else {
-                                <td bgcolor="#FF0000">Uygun değil.</td>
+                               "Belirtilmedi"
 
                         }
+                    }</li>
+                </ul>
+                @{
+                    if(book.isAvailable){
+                            <button class="btn btn-block btn-success active" type="submit"> İste </button>
                     }
-                </tr>
+                    else{
+                            <button class="btn btn-block btn-danger disabled" type="submit"> İste </button>
+                    }
+                }
+
+            </div>
+            <div class="col-md-9">
+                <h2>Kitap Yolculuğu</h2>
 
 
-            </tbody>
-        </table>
+                <div class="activity-feed">
+                    @for(i <- 0 to 20){
+                        <div class="feed-item">
+                            <div class="date">Sep 25</div>
+                            <div class="text">Responded to need <a href="single-need.php">“Volunteer opportunity”</a></div>
+                        </div>
+
+                    }
+
+                </div>
+
+
+            </div>
+        </div>
+
     </div>
+
+
 }
