@@ -20,7 +20,7 @@
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
                         Mail</strong></span> @user.email</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        Paylaştığı Kitap Sayısı</strong></span><a href="@routes.BookController.getBooksByAdder(user.id)">@user.books.size()<a></li>
+                        Paylaştığı Kitap Sayısı</strong></span><a href="@routes.BookController.getBooksByAdder(user.id)">@user.books.size()</a></li>
 
                 </ul>
 
@@ -53,8 +53,8 @@
                                 <tbody id="items">
                                 @for(book <- user.books) {
                                     <tr data-toggle="collapse" data-target="#@jsFileWithExtension(book.id)" class="accordion-toggle ">
-                                        <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</td>
-                                        <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</td>
+                                        <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</a></td>
+                                        <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></td>
                                         <td>@book.ISBN</td>
                                         <td>@book.additionDate</td>
                                         <td>@book.isAvailable</td>
@@ -110,8 +110,8 @@
                                     @for(transition <- transitions){
                                         @for(book <- transition.book ) {
                                             <tr>
-                                                <td>@book.name</td>
-                                                <td>@book.author</td>
+                                                <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</a></td>
+                                                <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></td>
                                                 <td>@book.adder.name</td>
                                                 <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
                                             </tr>
@@ -139,8 +139,8 @@
                                 @for(transition <- transitions){
                                     @for(book <- transition.book ) {
                                         <tr>
-                                            <td>@book.name</td>
-                                            <td>@book.author</td>
+                                            <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</a></td>
+                                            <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></td>
                                             <td>@book.adder.name</td>
                                             <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
                                         </tr>
@@ -188,7 +188,7 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <br>
-                                    <button class="btn btn-lg btn-success" type="submit"</i> Yolla</button>
+                                    <button class="btn btn-lg btn-success" type="submit"> Yolla</button>
                                 </div>
                             </div>
                         </form>
