@@ -12,6 +12,7 @@ import play.mvc.Result;
 import views.html.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class HomeController extends Controller {
 
@@ -30,7 +31,7 @@ public class HomeController extends Controller {
                 if (loginUser.password.equals(loginPassword)) {
                     Logger.info("Username is: " + loginUsername);
                     Logger.info("Password is: " + loginPassword);
-                    session("connected", loginUsername);
+                    session("connected", loginUser.id.toString());
                     return ok(logged_in.render(loginUser));
                 } else {
                     Logger.info("Username is: " + loginUsername);
@@ -73,16 +74,23 @@ public class HomeController extends Controller {
         Logger.info("Email is: " + registerEmail);
         Logger.info("Name is: " + registerName);
 
-        Users newUser = new Users();
-        newUser.username = registerUsername;
-        newUser.password = registerPassword;
-        newUser.email = registerEmail;
-        newUser.name = registerName;
+        List<Users> userList = Ebean.find(Users.class).where().eq("username", registerName).findList();
+        if(userList.size() < 1){
+            Users newUser = new Users();
+            newUser.username = registerUsername;
+            newUser.password = registerPassword;
+            newUser.email = registerEmail;
+            newUser.name = registerName;
 
-        newUser.save();
+            newUser.save();
+            session("connected", registerUsername);
+            return ok(logged_in.render(newUser));
+        }
+        else{
+            return ok(home.render());
+        }
 
-        session("connected", registerUsername);
-        return ok(logged_in.render(newUser));
+
     }
 
     public Result setup() {
@@ -117,8 +125,7 @@ public class HomeController extends Controller {
             book1.name = "Gödel, Escher, Bach";
             book1.additionDate = LocalDate.now();
             book1.save();
-            ozan.save();
-            
+
         });
 
         return ok(home.render());
