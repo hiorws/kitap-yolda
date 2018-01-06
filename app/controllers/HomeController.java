@@ -2,6 +2,7 @@ package controllers;
 
 import com.google.inject.Inject;
 import io.ebean.Ebean;
+import models.Books;
 import models.Users;
 import play.Logger;
 import play.data.DynamicForm;
@@ -9,6 +10,8 @@ import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.*;
+
+import java.time.LocalDate;
 
 public class HomeController extends Controller {
 
@@ -86,13 +89,36 @@ public class HomeController extends Controller {
 
         Ebean.execute(() -> {
             Users newUser = new Users();
-            // newUser.id = 1L;
             newUser.username = "admin";
             newUser.password = "123";
             newUser.email = "admin@test.com";
             newUser.name = "Admin Superuser";
-
             newUser.save();
+
+
+            Users ozgur = new Users();
+            ozgur.username = "hiorws";
+            ozgur.password = "123";
+            ozgur.email = "ozgurfiratcinar@gmail.com";
+            ozgur.name = "Ozgur Firat Cinar";
+            ozgur.save();
+
+            Users ozan = new Users();
+            ozan.username = "ozan";
+            ozan.password = "123";
+            ozan.email = "ozanonurtek@gmail.com";
+            ozan.name = "Ozan Onur Tek";
+            ozan.save();
+
+            Books book1 = new Books();
+            book1.isAvailable = true;
+            book1.author = "Douglas Hofstadter"
+            book1.adder = newUser;
+            book1.name = "Gödel, Escher, Bach";
+            book1.additionDate = LocalDate.now();
+            book1.save();
+            ozan.save();
+            
         });
 
         return ok(home.render());
