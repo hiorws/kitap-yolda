@@ -16,36 +16,40 @@ public class HomeController extends Controller {
     FormFactory formFactory;
 
     public Result loginSubmit() {
-        if(request().method().equals("GET")){
-            String user = session("connected");
-            Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
-            if (loginUser != null) {
-                    return ok(logged_in.render(loginUser));
-                }
+            if(request().method().equals("POST")){
 
-            return ok(home.render());
-        }
-        else {
             DynamicForm dynamicForm = formFactory.form().bindFromRequest();
             String loginUsername = dynamicForm.get("username");
             String loginPassword = dynamicForm.get("password");
-            Logger.info("Username is: " + loginUsername);
-            Logger.info("Password is: " + loginPassword);
-
             Users loginUser = Ebean.find(Users.class).where().eq("username", loginUsername).findOne();
 
             if (loginUser != null) {
                 if (loginUser.password.equals(loginPassword)) {
+                    Logger.info("Username is: " + loginUsername);
+                    Logger.info("Password is: " + loginPassword);
                     session("connected", loginUsername);
                     return ok(logged_in.render(loginUser));
                 } else {
-                    return ok(logged_in.render(loginUser));
+                    Logger.info("Username is: " + loginUsername);
+                    Logger.info("Password is: " + loginPassword);
+                    return  ok(home.render());
                 }
             }
+                return ok(home.render());
 
-            return ok(home.render());
+            }
+            else{
+                String user = session("connected");
+                Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
+                if(loginUser != null){
+                    return ok(logged_in.render(loginUser));
+                }
+                return ok(home.render());
+
+            }
+
         }
-    }
+
 
     public Result logout() {
         session().remove("connected");
