@@ -25,3 +25,4 @@ GET     /books                      controllers.BookController.listBooks
 POST    /add                        controllers.BookController.addBookForm
 
 GET     /books/:id                  controllers.BookController.getBookPage(id: Long)
+POST    /books                      controllers.BookController.searchBook

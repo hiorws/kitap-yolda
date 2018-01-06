@@ -1,5 +1,8 @@
 package controllers;
 
+import io.ebean.Ebean;
+import io.ebean.Expr;
+import io.ebean.Query;
 import models.Books;
 import models.Users;
 import play.Logger;
@@ -87,5 +90,21 @@ public class BookController extends Controller {
         else{
             return ok(home.render());
         }
+    }
+    public Result searchBook(){
+        DynamicForm dynamicForm = formFactory.form().bindFromRequest();
+        String searchBook = dynamicForm.get("search_parameter");
+        Query<Books> query = Ebean.createQuery(Books.class);
+        query.where(
+                Expr.or(Expr.icontains("name", searchBook),
+                        Expr.icontains("author", searchBook))
+        );
+        List<Books> bookList = query.findList();
+
+
+
+
+
+        return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
     }
 }
