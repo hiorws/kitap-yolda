@@ -20,7 +20,7 @@
             @for(book <- bookList) {
                 <tr>
                     <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</td>
-                    <td>@book.author</td>
+                    <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</td>
                     <td>@book.ISBN</td>
                     <td>@book.adder.name</td>
                     <td>@book.additionDate</td>

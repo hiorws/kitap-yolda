@@ -7,6 +7,7 @@ import models.Books;
 import models.Users;
 import play.Logger;
 import play.data.DynamicForm;
+import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -100,11 +101,14 @@ public class BookController extends Controller {
                         Expr.icontains("author", searchBook))
         );
         List<Books> bookList = query.findList();
+        return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
+    }
 
-
-
-
-
+    public Result getBooksByAuthor(String author) {
+        Query<Books> query = Ebean.createQuery(Books.class);
+        query.where(
+                Expr.eq("author", author));
+        List<Books> bookList = query.findList();
         return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
     }
 }

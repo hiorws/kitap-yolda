@@ -24,5 +24,6 @@ GET     /setup                      controllers.HomeController.setup
 GET     /books                      controllers.BookController.listBooks
 POST    /add                        controllers.BookController.addBookForm
 
-GET     /books/:id                  controllers.BookController.getBookPage(id: Long)
+GET     /books/:author              controllers.BookController.getBooksByAuthor(author)
+GET     /books/id/:id               controllers.BookController.getBookPage(id: Long)
 POST    /books                      controllers.BookController.searchBook
