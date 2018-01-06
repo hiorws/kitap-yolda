@@ -44,7 +44,7 @@ public class HomeController extends Controller {
             }
             else{
                 String user = session("connected");
-                Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
+                Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
                 if(loginUser != null){
                     return ok(logged_in.render(loginUser));
                 }
@@ -74,7 +74,7 @@ public class HomeController extends Controller {
         Logger.info("Email is: " + registerEmail);
         Logger.info("Name is: " + registerName);
 
-        List<Users> userList = Ebean.find(Users.class).where().eq("username", registerName).findList();
+        List<Users> userList = Ebean.find(Users.class).where().eq("id", registerName).findList();
         if(userList.size() < 1){
             Users newUser = new Users();
             newUser.username = registerUsername;
@@ -83,7 +83,7 @@ public class HomeController extends Controller {
             newUser.name = registerName;
 
             newUser.save();
-            session("connected", registerUsername);
+            session("connected", newUser.id.toString());
             return ok(logged_in.render(newUser));
         }
         else{
@@ -133,7 +133,7 @@ public class HomeController extends Controller {
 
     public Result home() {
         String user = session("connected");
-        Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
+        Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
         if(loginUser != null){
             return ok(logged_in.render(loginUser));
         }
@@ -143,10 +143,11 @@ public class HomeController extends Controller {
     }
 
     public Result getAllUsers() {
-        Users adminUser = Users.find.byId(1L);
         String user = session("connected");
+        Users loginUser = Ebean.find(Users.class).where().eq("id", user).findOne();
+
         if(user != null) {
-            return ok(users.render(adminUser.name));
+            return ok(users.render(loginUser));
         } else {
             return unauthorized("Oops, you are not authorized!");
         }

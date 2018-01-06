@@ -1,14 +1,7 @@
-@(bookList: List[Books])
+@(bookList: List[Books])(user: Users)
 
-@main("Books"){
-    <style>
-        .avaliable{
-            color: green;
-        }
-        .not_available{
-            color: red;
-        }
-    </style>
+@main("Books")(user){
+
     <div class="container">
         <h2>Kitaplar</h2>
         <p>Kitap Listesi</p>
