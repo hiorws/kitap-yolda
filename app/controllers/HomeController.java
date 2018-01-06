@@ -16,24 +16,35 @@ public class HomeController extends Controller {
     FormFactory formFactory;
 
     public Result loginSubmit() {
+        if(request().method().equals("GET")){
+            String user = session("connected");
+            Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
+            if (loginUser != null) {
+                    return ok(logged_in.render(loginUser));
+                }
 
-        DynamicForm dynamicForm = formFactory.form().bindFromRequest();
-        String loginUsername = dynamicForm.get("username");
-        String loginPassword = dynamicForm.get("password");
-        Logger.info("Username is: " + loginUsername);
-        Logger.info("Password is: " + loginPassword);
-
-        Users loginUser = Ebean.find(Users.class).where().eq("username", loginUsername).findOne();
-
-        if (loginUser != null) {
-            if (loginUser.password.equals(loginPassword)) {
-                session("connected", loginUsername);
-                return ok(logged_in.render("Logged in successfully!"));
-            } else {
-                return ok(logged_in.render("Check your password!"));
-            }
+            return ok(home.render());
         }
-        return ok(logged_in.render("Not granted!"));
+        else {
+            DynamicForm dynamicForm = formFactory.form().bindFromRequest();
+            String loginUsername = dynamicForm.get("username");
+            String loginPassword = dynamicForm.get("password");
+            Logger.info("Username is: " + loginUsername);
+            Logger.info("Password is: " + loginPassword);
+
+            Users loginUser = Ebean.find(Users.class).where().eq("username", loginUsername).findOne();
+
+            if (loginUser != null) {
+                if (loginUser.password.equals(loginPassword)) {
+                    session("connected", loginUsername);
+                    return ok(logged_in.render(loginUser));
+                } else {
+                    return ok(logged_in.render(loginUser));
+                }
+            }
+
+            return ok(home.render());
+        }
     }
 
     public Result logout() {
@@ -64,7 +75,7 @@ public class HomeController extends Controller {
         newUser.save();
 
         session("connected", registerUsername);
-        return ok(logged_in.render("User " + registerUsername + " registered successfully!"));
+        return ok(logged_in.render(newUser));
     }
 
     public Result setup() {

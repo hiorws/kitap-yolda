@@ -1,12 +1,199 @@
-@(request: String)
+@(user: Users)
 @main("Hey"){
     <div class="container">
+
         <div class="row">
-            <div class="jumbotron" style="align-items: center;">
-                <h1>            @request               </h1>
-            </div>
-            <div class="col-md-12">
-            </div>
-        </div>
-    </div>
+            <div class="col-sm-3"><!--left col-->
+
+                <ul class="list-group">
+                    <li class="list-group-item text-muted">Profil</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>İsim</strong></span> @user.username</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>Mail</strong></span> @user.email</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>Paylaştığı Kitap Sayısı</strong></span>2</li>
+
+                </ul>
+
+
+
+            </div><!--/col-3-->
+            <div class="col-sm-9">
+
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active"><a href="#home" data-toggle="tab">Ultimo Trattamento</a></li>
+                    <li><a href="#messages" data-toggle="tab">Cronologia Appuntamenti</a></li>
+                    <li><a href="#settings" data-toggle="tab">Kitap Ekle</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="home">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Trattamento</th>
+                                        <th>Prodotti utilizzati</th>
+                                        <th>Colori utilizzati</th>
+                                        <th>Note</th>
+                                        <th>Modifica</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="items">
+                                    <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle ">
+                                        <td>10.05.2017</td>
+                                        <td>MASSAGGIO schiena</td>
+                                        <td>usato loreal</td>
+                                        <td>colore rosso</td>
+                                        <td>il cliente preferisce il verde</td>
+                                        <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+                                        <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="12" class="hiddenRow"><div class="accordian-body collapse" id="demo1">
+                                            <table class="table table-striped">
+                                                <h1>Dettagli trattamento</h1>
+
+                                                <tbody>
+                                                    <tr id='addr0'>
+                                                        <td>
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name='name0'  placeholder='Name' class="form-control"/>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name='mail0' placeholder='Mail' class="form-control"/>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name='mobile0' placeholder='Mobile' class="form-control"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id='addr1'></tr>
+                                                </tbody>
+
+                                            </table>
+                                            <a id="add_row" class="btn btn-default pull-left">Aggiungi riga</a><a id='delete_row' class="pull-right btn btn-default">Elimina riga</a>
+
+                                        </div> </td>
+                                    </tr>
+
+
+
+                                </tbody>
+
+                            </table>
+                            <div class="row">
+                                <div class="col-md-6 col-md-offset-4 text-center">
+                                    <ul class="pagination" id="myPager"></ul>
+                                </div>
+                            </div>
+                        </div><!--/table-resp-->
+
+                        <div id="edit" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">×</button>
+                                        <h4 class="modal-title">Modifica dati per (servizio)</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input id="fn" type="text" class="form-control" name="fname" placeholder="Prodotti utilizzati">
+                                        <input id="ln" type="text" class="form-control" name="fname" placeholder="Colori Utilizzati">
+                                        <input id="mn" type="text" class="form-control" name="fname" placeholder="Note">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="up" class="btn btn-success" data-dismiss="modal">Aggiorna</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Chiudi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div><!--/tab-pane-->
+                    <div class="tab-pane" id="messages">
+
+                        <h2></h2>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Servizio</th>
+                                        <th>Modifica</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="items">
+                                    <tr>
+                                        <td>10.05.2017</td>
+                                        <td>MASSAGGIO schiena</td>
+
+                                        <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div><!--/tab-pane-->
+                    <div class="tab-pane" id="settings">
+
+
+                        <hr>
+                        <form class="form" action="##" method="post" id="registrationForm">
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="first_name"><h4>Kitabın Adı</h4></label>
+                                    <input type="text" class="form-control" name="first_name" id="first_name" placeholder="nome" title="Inserisci il nome">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="last_name"><h4>ISBN</h4></label>
+                                    <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Cognome" title="Inserisci il cognome">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="mobile"><h4>Kitabın Yazarı</h4></label>
+                                    <input type="text" class="form-control" name="mobile" id="mobile" placeholder="inserisci il numero di telefono" title="inserisci il numero di telefono">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="email"><h4>Email</h4></label>
+                                    <input type="email" class="form-control" name="email" id="email" placeholder="email" title="Inserisci l'email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="available"><h4>Kitabın uygunluğu</h4></label>
+                                    <input type="checkbox" class="form-control" name="available" id="available" checked="checked">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <br>
+                                    <button class="btn btn-lg btn-success" type="submit"</i> Yolla</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div><!--/tab-pane-->
+            </div><!--/tab-content-->
+
+        </div><!--/col-9-->
+    </div><!--/row-->
+</div>
 }
