@@ -7,6 +7,7 @@ import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
@@ -27,7 +28,7 @@ public class Books extends Model {
     @Constraints.Required
     public String author;
 
-    @Constraints.Required
+    @ManyToOne
     public Users adder;
 
     @Constraints.Required

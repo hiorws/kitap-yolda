@@ -1,7 +1,51 @@
 @(bookList: List[Books])
 
-<ul>
-    @for(book <- bookList) {
-        <li>@book.name</li>
-    }
-</ul>
+@main("Books"){
+    <style>
+        .avaliable{
+            color: green;
+        }
+        .not_available{
+            color: red;
+        }
+    </style>
+    <div class="container">
+        <h2>Kitaplar</h2>
+        <p>Kitap Listesi</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Kitabın Adı</th>
+                    <th>Yazarı</th>
+                    <th>ISBN</th>
+                    <th>Ekleyen</th>
+                    <th>Eklenme Tarihi</th>
+                    <th>Uygunluk</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for(book <- bookList) {
+                <tr>
+                    <td>@book.name</td>
+                    <td>@book.author</td>
+                    <td>@book.ISBN</td>
+                    <td>@book.adder.name</td>
+                    <td>@book.additionDate</td>
+                    @{
+                        if(book.isAvailable){
+                                <td bgcolor="#00FF00">Uygun.</td>
+
+                        }
+                        else
+                        {
+                                <td bgcolor="#FF0000">Uygun değil.</td>
+
+                        }
+                    }
+                </tr>
+            }
+
+            </tbody>
+        </table>
+    </div>
+}

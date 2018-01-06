@@ -24,6 +24,7 @@ public class BookController extends Controller {
         newBook.adder = bookAdder;
         newBook.author = bookAuthor;
         newBook.isAvailable = bookAvailable;
+        newBook.adder = bookAdder;
         newBook.ISBN = bookIsbn != "" ? bookIsbn : "";
         newBook.additionDate = LocalDate.now();
         Logger.info(newBook.ISBN);
@@ -55,7 +56,12 @@ public class BookController extends Controller {
         String user = session("connected");
         Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
         if(loginUser!= null){
-            addBook(bookName,loginUser,bookAuthor,bookAvailable.equals("on"),bookIsbn);
+            if(bookAvailable == null){
+                addBook(bookName,loginUser,bookAuthor,false,bookIsbn);
+            }
+            else{
+                addBook(bookName,loginUser,bookAuthor,true,bookIsbn);
+            }
         }
         return ok(logged_in.render(loginUser));
     }

@@ -112,7 +112,7 @@ public class HomeController extends Controller {
 
             Books book1 = new Books();
             book1.isAvailable = true;
-            book1.author = "Douglas Hofstadter"
+            book1.author = "Douglas Hofstadter";
             book1.adder = newUser;
             book1.name = "Gödel, Escher, Bach";
             book1.additionDate = LocalDate.now();
@@ -125,7 +125,14 @@ public class HomeController extends Controller {
     }
 
     public Result home() {
-        return ok(home.render());
+        String user = session("connected");
+        Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
+        if(loginUser != null){
+            return ok(logged_in.render(loginUser));
+        }
+        else{
+            return ok(home.render());
+        }
     }
 
     public Result getAllUsers() {
