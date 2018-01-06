@@ -111,4 +111,14 @@ public class BookController extends Controller {
         List<Books> bookList = query.findList();
         return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
     }
+
+    public Result getBooksByAdder(Long id) {
+        Users user = Users.find.byId(id);
+        Query<Books> query = Ebean.createQuery(Books.class);
+        query.where(
+                Expr.eq("adder", user));
+        List<Books> bookList = query.findList();
+        return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
+    }
+
 }
