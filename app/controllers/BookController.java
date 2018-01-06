@@ -1,25 +1,32 @@
 package controllers;
 
+import io.ebean.Ebean;
 import models.Books;
 import models.Users;
+import play.Logger;
+import play.data.DynamicForm;
+import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.Counter;
 import views.html.books;
+import views.html.logged_in;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import java.time.LocalDate;
 import java.util.List;
 
 public class BookController extends Controller {
-
-    public void addBook(String bookName, Users bookAdder, String bookAuthor, Boolean bookAvailable) {
+    @Inject
+    FormFactory formFactory;
+    public void addBook(String bookName, Users bookAdder, String bookAuthor, Boolean bookAvailable, String bookIsbn) {
         Books newBook = new Books();
         newBook.name = bookName;
         newBook.adder = bookAdder;
         newBook.author = bookAuthor;
         newBook.isAvailable = bookAvailable;
-
+        newBook.ISBN = bookIsbn != "" ? bookIsbn : "";
+        newBook.additionDate = LocalDate.now();
+        Logger.info(newBook.ISBN);
         newBook.save();
     }
 
@@ -36,5 +43,20 @@ public class BookController extends Controller {
         List<Books> booksList = Books.find.all();
         return ok(books.render(booksList));
     }
+    public Result addBookForm(){
+        DynamicForm dynamicForm = formFactory.form().bindFromRequest();
+        String bookAvailable = dynamicForm.get("book_available");
+        String bookAuthor = dynamicForm.get("book_author");
+        String bookName = dynamicForm.get("book_name");
+        String bookIsbn = dynamicForm.get("book_isbn");
+        Logger.info(bookIsbn);
+        Logger.info(bookAvailable);
 
+        String user = session("connected");
+        Users loginUser = Ebean.find(Users.class).where().eq("username", user).findOne();
+        if(loginUser!= null){
+            addBook(bookName,loginUser,bookAuthor,bookAvailable.equals("on"),bookIsbn);
+        }
+        return ok(logged_in.render(loginUser));
+    }
 }

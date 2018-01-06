@@ -4,9 +4,10 @@ import com.typesafe.config.Optional;
 import io.ebean.Finder;
 import io.ebean.Model;
 import play.data.validation.Constraints;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Books extends Model {
@@ -30,13 +31,12 @@ public class Books extends Model {
     public Users adder;
 
     @Constraints.Required
-    public Date additionDate;
+    public LocalDate additionDate;
 
     public Books() {
-
     }
 
-    public Books(@Constraints.Required String name, @Constraints.Required boolean isAvailable, @Constraints.Required String author, @Constraints.Required Users adder, @Constraints.Required Date additionDate) {
+    public Books(@Constraints.Required String name, @Constraints.Required boolean isAvailable, @Constraints.Required String author, @Constraints.Required Users adder, @Constraints.Required LocalDate additionDate) {
         this.name = name;
         this.isAvailable = isAvailable;
         this.author = author;

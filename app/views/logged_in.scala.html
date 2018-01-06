@@ -1,5 +1,7 @@
-@(user: Users)
-@main("Hey"){
+    @import helper._
+    @(user: Users)
+
+    @main("Hey"){
     <div class="container">
 
         <div class="row">
@@ -143,44 +145,35 @@
 
 
                         <hr>
-                        <form class="form" action="##" method="post" id="registrationForm">
+                        <form class="form" action="@routes.BookController.addBookForm" method="post" id="form">
+                            @CSRF.formField
                             <div class="form-group">
-
                                 <div class="col-xs-6">
-                                    <label for="first_name"><h4>Kitabın Adı</h4></label>
-                                    <input type="text" class="form-control" name="first_name" id="first_name" placeholder="nome" title="Inserisci il nome">
+                                    <label for="book_name"><h4>Kitabın Adı</h4></label>
+                                    <input type="text" class="form-control" name="book_name" id="book_name" placeholder="nome" title="Inserisci il nome">
                                 </div>
                             </div>
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <label for="last_name"><h4>ISBN</h4></label>
-                                    <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Cognome" title="Inserisci il cognome">
+                                    <label for="book_isbn"><h4>ISBN</h4></label>
+                                    <input type="text" class="form-control" name="book_isbn" id="book_isbn" placeholder="Cognome" title="Inserisci il cognome">
                                 </div>
                             </div>
 
 
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <label for="mobile"><h4>Kitabın Yazarı</h4></label>
-                                    <input type="text" class="form-control" name="mobile" id="mobile" placeholder="inserisci il numero di telefono" title="inserisci il numero di telefono">
+                                    <label for="book_author"><h4>Kitabın Yazarı</h4></label>
+                                    <input type="text" class="form-control" name="book_author" id="book_author" placeholder="inserisci il numero di telefono" title="inserisci il numero di telefono">
                                 </div>
                             </div>
                             <div class="form-group">
-
                                 <div class="col-xs-6">
-                                    <label for="email"><h4>Email</h4></label>
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="email" title="Inserisci l'email">
+                                    <label for="book_available"><h4>Kitabın uygunluğu</h4></label>
+                                    <input type="checkbox" class="form-control" name="book_available" id="book_available" checked="checked">
                                 </div>
                             </div>
-                            <div class="form-group">
-
-                                <div class="col-xs-6">
-                                    <label for="available"><h4>Kitabın uygunluğu</h4></label>
-                                    <input type="checkbox" class="form-control" name="available" id="available" checked="checked">
-                                </div>
-                            </div>
-
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <br>

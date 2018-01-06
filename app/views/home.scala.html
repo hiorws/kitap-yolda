@@ -45,7 +45,8 @@
                                 </div>
                                 <hr>
                             </div>
-                            <form id="login-form" action="@CSRF(routes.HomeController.loginSubmit())" method="post" role="form" style="display: block;">
+                            <form id="login-form" action="@routes.HomeController.loginSubmit()" method="post" role="form" style="display: block;">
+                                @CSRF.formField
                                 <div class="form-group">
                                     <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                                 </div>
@@ -61,7 +62,8 @@
                                 </div>
 
                             </form>
-                            <form id="register-form" action="@CSRF(routes.HomeController.registerSubmit())" method="post" role="form" style="display: none;">
+                            <form id="register-form" action="@routes.HomeController.registerSubmit()" method="post" role="form" style="display: none;">
+                                @CSRF.formField
                                 <div class="form-group">
                                     <input type="text" name="name" id="name" tabindex="1" class="form-control" placeholder="Name" value="">
                                 </div>
