@@ -1,3 +1,5 @@
+
+@import helper._
 @(book: Books)(user: Users)
 
 @main("Book")(user) {
@@ -53,14 +55,21 @@
                         }
                     }</li>
                 </ul>
-                @{
+                <form id="wish-form" action="@routes.BookController.wishBook()" method="post" role="form" style="display: block;">
+                    @CSRF.formField
+                    @{
                     if(book.isAvailable){
-                            <button class="btn btn-block btn-success active" type="submit"> İste </button>
+                            <input type="submit" name="wish-submit" id="wish-form"  class="btn btn-block btn-success active" value="İste">
+                            </input>
+
                     }
                     else{
                             <button class="btn btn-block btn-danger disabled" type="submit"> İste </button>
                     }
                 }
+                    <input type="hidden" name="book_id" value="@book.id"></input>
+
+                </form>
 
             </div>
             <div class="col-md-9">

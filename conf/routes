@@ -24,4 +24,5 @@ GET     /books/:author              controllers.BookController.getBooksByAuthor(
 GET     /books/user/:id             controllers.BookController.getBooksByAdder(id: Long)
 GET     /books/id/:id               controllers.BookController.getBookPage(id: Long)
 POST    /books                      controllers.BookController.searchBook
-GET     /show-filter/:searchBook                controllers.BookController.showFilter(searchBook: String)
+GET     /show-filter/:searchBook    controllers.BookController.showFilter(searchBook: String)
+POST    /wish-book                  controllers.BookController.wishBook()

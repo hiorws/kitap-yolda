@@ -4,6 +4,7 @@ import io.ebean.Ebean;
 import io.ebean.Expr;
 import io.ebean.Query;
 import models.Books;
+import models.Transitions;
 import models.Users;
 import play.Logger;
 import play.data.DynamicForm;
@@ -126,5 +127,19 @@ public class BookController extends Controller {
         List<Books> bookList = query.findList();
         return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
     }
+    public Result wishBook(){
+        Users currentUser = sessionController.findUserWithSession("connected");
+        DynamicForm dynamicForm = formFactory.form().bindFromRequest();
+        String bookId = dynamicForm.get("book_id");
+        Transitions transition = new Transitions();
+        transition.book = Books.find.byId(Long.parseLong(bookId));
+        transition.wisher = Users.find.byId(currentUser.id);
+        transition.wishDate = LocalDate.now();
+        transition.save();
+        return redirect(routes.HomeController.me());
+
+    }
+
+
 
 }

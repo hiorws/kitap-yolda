@@ -2,14 +2,19 @@ package controllers;
 
 import com.google.inject.Inject;
 import io.ebean.Ebean;
+import io.ebean.Expr;
+import io.ebean.Query;
 import models.Books;
+import models.Transitions;
 import models.Users;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.*;
+import views.html.home;
+import views.html.logged_in;
+import views.html.users;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -52,11 +57,18 @@ public class HomeController extends Controller {
         public Result me(){
             Users loginUser = sessionController.findUserWithSession("connected");
             if(loginUser != null){
-                return ok(logged_in.render(loginUser));
+
+                return ok(logged_in.render(loginUser, getmyWishList()));
             }
             return ok(home.render());
         }
 
+        private List<Transitions> getmyWishList(){
+            Users currentUser = sessionController.findUserWithSession("connected");
+            Query<Transitions> query = Ebean.createQuery(Transitions.class);
+            List<Transitions> transitions = query.where(Expr.eq("wisher", currentUser)).findList();
+            return transitions;
+        }
 
 
     public Result logout() {
@@ -139,7 +151,7 @@ public class HomeController extends Controller {
     public Result home() {
         Users loginUser = sessionController.findUserWithSession("connected");
         if(loginUser != null){
-            return ok(logged_in.render(loginUser));
+            return ok(logged_in.render(loginUser, getmyWishList()));
         }
         else{
             return ok(home.render());

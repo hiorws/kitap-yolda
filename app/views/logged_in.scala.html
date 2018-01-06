@@ -1,5 +1,5 @@
 @import helper._
-@(user: Users)
+@(user: Users)(transitions: List[Transitions])
 @jsFileWithExtension(id: Long) = @{
     "demo" + id
 }
@@ -100,17 +100,20 @@
                                     <tr>
                                         <th>Kitap Adi</th>
                                         <th>Yazari</th>
-                                        <th>Kitabin Suanki Sahibi</th>
+                                        <th>Kitabin Ekleyen</th>
                                         <th>Istegi Iptal Et</th>
                                     </tr>
                                 </thead>
                                 <tbody id="items">
-                                    <tr>
-                                        <td>Fareler ve Insanlar</td>
-                                        <td>Steinback</td>
-                                        <td>Kilimcinin Kor Oglu</td>
-                                        <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
-                                    </tr>
+                                    @for(transition <- transitions){
+                                        <tr>
+                                            <td>@transition.book.name</td>
+                                            <td>@transition.book.author</td>
+                                            <td>@transition.book.adder.name</td>
+                                            <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+                                        </tr>
+                                    }
+
                                 </tbody>
                             </table>
                         </div>
