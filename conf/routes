@@ -27,3 +27,5 @@ POST    /books                      controllers.BookController.searchBook
 GET     /show-filter/:searchBook    controllers.BookController.showFilter(searchBook: String)
 POST    /wish-book                  controllers.BookController.wishBook()
 POST    /delete-wish                controllers.BookController.takeBackWish()
+
+GET     /about                      controllers.HomeController.about

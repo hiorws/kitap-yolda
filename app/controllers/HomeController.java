@@ -12,6 +12,7 @@ import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.about;
 import views.html.home;
 import views.html.logged_in;
 import views.html.users;
@@ -166,6 +167,12 @@ public class HomeController extends Controller {
         } else {
             return unauthorized("Oops, you are not authorized!");
         }
+    }
+
+    public Result about() {
+        Users loginUser = sessionController.findUserWithSession("connected");
+        return ok(about.render(loginUser));
+
     }
 
 }
