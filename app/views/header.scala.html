@@ -29,16 +29,16 @@
             <ul class="nav navbar-nav">
                 <li><a href="/books">Kitaplar</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
             <form class="navbar-form navbar-left" action="@routes.BookController.searchBook()" method="post" >
                 @CSRF.formField
                 <div class="form-group" >
-                    <input type="search_parameter" name="search_parameter" class="form-control" placeholder="Search" >
+                    <input type="search_parameter" name="search_parameter" class="form-control" placeholder="Bi şeyler ara.." >
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-default">Ara</button>
             </form>
-
                 @if(user != null){
-                        <ul class="nav navbar-nav navbar-right">
+
                         <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@user.name <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -47,8 +47,8 @@
                         <li><a href="/logout">Çıkış</a></li>
                         </ul>
                         </li>
-                        </ul>
                 }
+            </ul>
 
 
 

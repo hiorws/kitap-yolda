@@ -64,15 +64,15 @@
                                 </input>
                         }
                     }
-                    else{
-                        if(notWishedYet){
-                                <button class="btn btn-block btn-danger disabled" type="submit"> İste </button>
-                        }
-                    }
                 }
                     <input type="hidden" name="book_id" value="@book.id"></input>
 
                 </form>
+                @if(!book.isAvailable) {
+                    @if(book.adder.id != user.id) {
+                    <button class="btn btn-block btn-danger disabled" type="submit"> İste </button>
+                    }
+                }
                 <form id="change-wish-form" action="@routes.BookController.takeBackWish()" method="post" role="form" style="display: block;">
                     @CSRF.formField
                     @{
