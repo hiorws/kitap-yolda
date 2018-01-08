@@ -36,7 +36,7 @@ public class BookController extends Controller {
         newBook.adder = bookAdder;
         newBook.ISBN = bookIsbn != "" ? bookIsbn : "";
         newBook.additionDate = LocalDate.now();
-        Logger.info(newBook.ISBN);
+        // Logger.info(newBook.ISBN);
         newBook.save();
 
     }
@@ -67,8 +67,8 @@ public class BookController extends Controller {
         String bookAuthor = dynamicForm.get("book_author");
         String bookName = dynamicForm.get("book_name");
         String bookIsbn = dynamicForm.get("book_isbn");
-        Logger.info(bookIsbn);
-        Logger.info(bookAvailable);
+        // Logger.info(bookIsbn);
+        // Logger.info(bookAvailable);
 
         Users loginUser = sessionController.findUserWithSession("connected");
         if(loginUser!= null){
@@ -95,13 +95,19 @@ public class BookController extends Controller {
 
     public Result getBookPage(Long bookID){
         Books book = Books.find.byId(bookID);
-
-        if(book != null){
-            return ok(bookinfo.render(book, sessionController.findUserWithSession("connected"), checkIfAlreadyWished(book)));
+        Users currentUser = sessionController.findUserWithSession("connected");
+        if (currentUser != null){
+            if(book != null){
+                return ok(bookinfo.render(book, currentUser, checkIfAlreadyWished(book)));
+            }
+            else{
+                return ok(home.render());
+            }
         }
         else{
             return ok(home.render());
         }
+
     }
     public Result searchBook(){
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();

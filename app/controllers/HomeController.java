@@ -40,10 +40,10 @@ public class HomeController extends Controller {
 
             if (loginUser != null) {
                 if (loginUser.password.equals(loginPassword)) {
-                    Logger.info("Username is: " + loginUsername);
-                    Logger.info("Password is: " + loginPassword);
+                    // Logger.info("Username is: " + loginUsername);
+                    // Logger.info("Password is: " + loginPassword);
                     sessionController.setSession("connected", loginUser.id.toString());
-                    Logger.info("here");
+                    // Logger.info("here");
                     return redirect(routes.HomeController.me());
                 } else {
 
@@ -85,11 +85,11 @@ public class HomeController extends Controller {
         String registerEmail = dynamicForm.get("email");
         String registerName = dynamicForm.get("name");
 
-        Logger.info("Username is: " + registerUsername);
-        Logger.info("Password is: " + registerPassword);
-        Logger.info("Confirm Password is: " + registerConfirmPassword);
-        Logger.info("Email is: " + registerEmail);
-        Logger.info("Name is: " + registerName);
+//        Logger.info("Username is: " + registerUsername);
+//        Logger.info("Password is: " + registerPassword);
+//        Logger.info("Confirm Password is: " + registerConfirmPassword);
+//        Logger.info("Email is: " + registerEmail);
+//        Logger.info("Name is: " + registerName);
 
         List<Users> userList = Ebean.find(Users.class).where().eq("username", registerName).findList();
         if(userList.size() < 1){
@@ -137,9 +137,10 @@ public class HomeController extends Controller {
             ozan.save();
 
             Books book1 = new Books();
+            book1.adder = ozgur;
             book1.isAvailable = true;
             book1.author = "Douglas Hofstadter";
-            book1.adder = newUser;
+            book1.ISBN = "9780140179972";
             book1.name = "Gödel, Escher, Bach";
             book1.additionDate = LocalDate.now();
             book1.save();
