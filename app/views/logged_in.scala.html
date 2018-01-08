@@ -47,7 +47,7 @@
                                         <th>ISBN</th>
                                         <th>Eklenme Tarihi</th>
                                         <th>Uygunluk</th>
-                                        <th>Edit</th>
+                                        <th>Kitap Bilgilerini Düzenle</th>
                                     </tr>
                                 </thead>
                                 <tbody id="items">
@@ -57,8 +57,16 @@
                                         <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></td>
                                         <td>@book.ISBN</td>
                                         <td>@book.additionDate</td>
-                                        <td>@book.isAvailable</td>
-                                        <td><button type="button" data-toggle="modal" data-target="#@jsFileWithExtension2(book.id)" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
+                                        @{
+                                            if(book.isAvailable){
+                                                    <td><i class="fa fa-check" aria-hidden="true"></i></td>
+                                            }
+                                            else
+                                            {
+                                                    <td><i class="fa fa-times" aria-hidden="true"></i></td>
+                                            }
+                                        }
+                                        <td><button type="button" data-toggle="modal" data-target="#@jsFileWithExtension2(book.id)" data-uid="1" class="update btn btn-warning btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
                                             <!-- <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td> -->
                                     </tr>
 
@@ -160,7 +168,7 @@
                             @CSRF.formField
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <label for="book_name"><h4>Kitabın Adı</h4></label>
+                                    <label for="book_name"><h4>Kitap Adı</h4></label>
                                     <input type="text" class="form-control" name="book_name" id="book_name" placeholder="nome" title="Inserisci il nome">
                                 </div>
                             </div>
@@ -175,13 +183,13 @@
 
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <label for="book_author"><h4>Kitabın Yazarı</h4></label>
+                                    <label for="book_author"><h4>Yazar</h4></label>
                                     <input type="text" class="form-control" name="book_author" id="book_author" placeholder="inserisci il numero di telefono" title="inserisci il numero di telefono">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <label for="book_available"><h4>Kitabın uygunluğu</h4></label>
+                                    <label for="book_available"><h4>Kitap dolaşıma uygun mu?</h4></label>
                                     <input type="checkbox" class="form-control" name="book_available" id="book_available" checked="checked">
                                 </div>
                             </div>

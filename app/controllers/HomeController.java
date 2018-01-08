@@ -176,4 +176,6 @@ public class HomeController extends Controller {
 
     }
 
+    // TODO add a user profile screen to see other users profile and reputation
+
 }

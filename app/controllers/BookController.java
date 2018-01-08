@@ -178,5 +178,17 @@ public class BookController extends Controller {
         return redirect(routes.HomeController.me());
     }
 
+    // TODO : refactor this function against to list the wished books by user id
+    public List<Transitions> wishedBooksById(Long id) {
+        Users user = Users.find.byId(id);
+        Query<Transitions> query = Ebean.createQuery(Transitions.class);
+
+        query.where(
+                Expr.or(Expr.eq("wisher", user),
+                        Expr.eq("wisher", user))
+        );
+        List<Transitions> bookList = query.findList();
+        return bookList;
+    }
 
 }

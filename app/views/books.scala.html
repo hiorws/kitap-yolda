@@ -26,11 +26,11 @@
                     <td>@book.additionDate</td>
                     @{
                         if(book.isAvailable){
-                                <td bgcolor="#00FF00">Uygun.</td>
+                                <td><i class="fa fa-check" aria-hidden="true"></i></td>
                         }
                         else
                         {
-                                <td bgcolor="#FF0000">Uygun değil.</td>
+                                <td><i class="fa fa-times" aria-hidden="true"></i></td>
                         }
                     }
                 </tr>
