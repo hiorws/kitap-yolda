@@ -1,8 +1,7 @@
-
 @import helper._
 @(book: Books)(user: Users)(notWishedYet: Boolean)
 
-@main("Book")(user) {
+@main("Kitap Bilgileri")(user) {
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/transition.css")">
 
 
@@ -22,16 +21,16 @@
 
                 <ul class="list-group">
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        Kitabın Adı</strong></span>@book.name</li>
+                        Kitap Adı</strong></span>@book.name</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        Kitabın Yazarı</strong></span><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></li>
+                        Yazar</strong></span><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></li>
 
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        Kitabı Ekleyen</strong></span>@book.adder.name</li>
+                        Kitabı Ekleyen</strong></span><a href="@routes.BookController.getBooksByAdder(book.adder.id)">@book.adder.name</a></li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        Kitabın Eklenme Tarihi</strong></span>@book.additionDate</li>
+                        Eklenme Tarihi</strong></span>@book.additionDate</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        Kitabın Uygunluk Durumu</strong></span>
+                        Durum</strong></span>
                         @{
                             if(book.isAvailable) {
                                     <span class="available">Uygun</span>
