@@ -1,6 +1,7 @@
 @import helper._
 @import java.util
-@(user: Users)(transitions: List[Transitions])(bookMap: util.HashMap[Books, Users])
+@(user: Users)(transitions: List[Transitions])(bookList: List[Books])
+@*(bookMap: util.HashMap[Books, Users])*@
 @jsFileWithExtension(id: Long) = @{
     "demo" + id
 }
@@ -21,7 +22,7 @@
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
                         Mail</strong></span> @user.email</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        Paylaştığı Kitap Sayısı</strong></span><a href="@routes.BookController.getBooksByAdder(user.id)">@user.books.size()</a></li>
+                        Paylaştığı Kitap Sayısı</strong></span><a href="@routes.BookController.getBooksByAdder(user.id)">@user.booksAdded.size()</a></li>
 
                 </ul>
 
@@ -52,7 +53,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="items">
-                                @for(book <- user.books) {
+                                @for(book <- user.booksAdded) {
                                     <tr data-toggle="collapse" data-target="#@jsFileWithExtension(book.id)" class="accordion-toggle ">
                                         <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</a></td>
                                         <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></td>
@@ -113,6 +114,8 @@
                                         <th>Yazari</th>
                                         <th>Kitabin Ekleyen</th>
                                         <th>Istegi Iptal Et</th>
+                                        <th>Kitap Elime Ulaştı</th>
+
                                     </tr>
                                 </thead>
                                 <tbody id="items">
@@ -122,6 +125,7 @@
                                                 <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</a></td>
                                                 <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></td>
                                                 <td>@book.adder.name</td>
+                                                <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
                                                 <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
                                             </tr>
                                         }
@@ -140,18 +144,29 @@
                                     <tr>
                                         <th>Kitap Adi</th>
                                         <th>Yazari</th>
-                                        <th>Kitabin Ekleyen</th>
-                                        <th>Istegi kabul et</th>
+                                        <th>Isteyen Adı</th>
+                                        <th>İsteği Onayla</th>
                                     </tr>
                                 </thead>
                                 <tbody id="items">
+                                    @if(bookList != null){
+                                        @for(book <- bookList){
+                                            @for(trans <- book.transition){
+                                                @for(wisher <- trans.wisher){
+                                                    <tr>
+                                                        <td>@book.name</td>
+                                                        <td>@book.author</td>
+                                                        <td>@wisher.name</td>
+                                                        <td>-----</td>
+                                                    </tr>
+                                                }
 
-                                            <tr>
-                                                <td>-----------</td>
-                                                <td>-----------</td>
-                                                <td>-----------</td>
-                                                <td>-----------</td>
-                                            </tr>
+                                            }
+
+                                        }
+                                    }
+
+
 
                                 </tbody>
                             </table>

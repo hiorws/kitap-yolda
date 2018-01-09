@@ -14,8 +14,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.about;
 import views.html.home;
-import views.html.logged_in;
 import views.html.users;
+import views.html.logged_in;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -41,10 +41,7 @@ public class HomeController extends Controller {
 
             if (loginUser != null) {
                 if (loginUser.password.equals(loginPassword)) {
-                    // Logger.info("Username is: " + loginUsername);
-                    // Logger.info("Password is: " + loginPassword);
                     sessionController.setSession("connected", loginUser.id.toString());
-                    // Logger.info("here");
                     return redirect(routes.HomeController.me());
                 } else {
 
@@ -59,8 +56,19 @@ public class HomeController extends Controller {
         public Result me(){
             Users loginUser = sessionController.findUserWithSession("connected");
             if(loginUser != null){
-                HashMap<Books, Users> hm = wishedBooksHashMapByUserId(loginUser.id);
-                return ok(logged_in.render(loginUser, getmyWishList(), hm));
+                Query<Transitions> queryTransition = Ebean.createQuery(Transitions.class);
+                Query<Books> queryBooks = Ebean.createQuery(Books.class);
+                List<Books> bookList = null;
+                if(Transitions.find.query().findCount() > 0){
+                    Logger.info("Here");
+
+                    List<Transitions> transitionList = queryTransition.where(Expr.and(Expr.eq("currentOwnerId", loginUser.id),
+                            Expr.isNotEmpty("wisher"))).findList();
+                    boolean b = transitionList.size() > 0;
+                    Logger.info(Boolean.toString(b));
+                    bookList = queryBooks.where(Expr.in("transition", transitionList)).findList();
+                }
+                return ok(logged_in.render(loginUser, getmyWishList(), bookList));
             }
             return ok(home.render());
         }
@@ -86,12 +94,6 @@ public class HomeController extends Controller {
         String registerEmail = dynamicForm.get("email");
         String registerName = dynamicForm.get("name");
 
-//        Logger.info("Username is: " + registerUsername);
-//        Logger.info("Password is: " + registerPassword);
-//        Logger.info("Confirm Password is: " + registerConfirmPassword);
-//        Logger.info("Email is: " + registerEmail);
-//        Logger.info("Name is: " + registerName);
-
         List<Users> userList = Ebean.find(Users.class).where().eq("username", registerName).findList();
         if(userList.size() < 1){
             Users newUser = new Users();
@@ -108,7 +110,6 @@ public class HomeController extends Controller {
         else{
             return ok(home.render());
         }
-
 
     }
 
@@ -139,6 +140,7 @@ public class HomeController extends Controller {
 
             Books book1 = new Books();
             book1.adder = ozgur;
+            book1.owner = ozgur;
             book1.isAvailable = true;
             book1.author = "Douglas Hofstadter";
             book1.ISBN = "9780140179972";
@@ -154,7 +156,6 @@ public class HomeController extends Controller {
     public Result home() {
         Users loginUser = sessionController.findUserWithSession("connected");
         if(loginUser != null){
-            // return ok(logged_in.render(loginUser, getmyWishList()));
             return redirect(routes.HomeController.me());
         }
         else{

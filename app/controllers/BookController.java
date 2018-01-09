@@ -11,7 +11,6 @@ import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
-import sun.rmi.runtime.Log;
 import views.html.bookinfo;
 import views.html.books;
 import views.html.home;
@@ -21,8 +20,6 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class BookController extends Controller {
     private SessionController sessionController;
@@ -36,6 +33,8 @@ public class BookController extends Controller {
         Books newBook = new Books();
         newBook.name = bookName;
         newBook.adder = bookAdder;
+        newBook.owner = bookAdder;
+        Logger.info(bookAdder.name);
         newBook.author = bookAuthor;
         newBook.isAvailable = bookAvailable;
         newBook.adder = bookAdder;
@@ -155,11 +154,14 @@ public class BookController extends Controller {
         String bookId = dynamicForm.get("book_id");
         Transitions transition = new Transitions();
         Books wishedBook = Books.find.byId(Long.parseLong(bookId));
-        if(!currentUser.books.contains(wishedBook)){
+        if(!currentUser.booksOwned.contains(wishedBook)){
             transition.book.add(wishedBook);
-            transition.wisher.add(Users.find.byId(currentUser.id));
+            transition.currentOwnerId = wishedBook.owner.id;
+            transition.wisher.add(currentUser);
             transition.wishDate = LocalDate.now();
+            wishedBook.transition.add(transition);
             transition.save();
+            wishedBook.save();
         }
         return redirect(routes.HomeController.me());
     }
@@ -176,6 +178,7 @@ public class BookController extends Controller {
                     Expr.eq("book", searchBook))).findList();
 
         for(Transitions t: transitionsList){
+            searchBook.transition.remove(t);
             t.delete();
         }
 
@@ -196,22 +199,12 @@ public class BookController extends Controller {
                 Expr.eq("adder", currentUser));
         List<Books> usersBookList = queryBookList.findList();
 
-        for(Books currentBook: usersBookList){
-            // Logger.info(currentBook.name);
-            Query<Transitions> queryTransition = Ebean.createQuery(Transitions.class);
-            List<Transitions> transitionsList = queryTransition.where(
-                    Expr.eq("book", currentBook)
-            ).findList();
 
-            for(Transitions t: transitionsList) {
-                for(Users wisher: t.wisher){
-                    Logger.info("BOOK NAME: " + currentBook.name +  " WISHER NAME: " + wisher.name);
-                    bookAndUsersHM.put(currentBook, wisher);
-                    // Logger.info(wisher.name);
-                }
-            }
+        Books book = Books.find.byId(2L);
+
+        if(book.transition != null){
+            Logger.info(book.transition.get(0).wisher.get(0).name);
         }
-
 
 //        Logger.info("Context of the Books and Wishers");
 //        Set<Map.Entry<Books, Users>> hashSet = bookAndUsersHM.entrySet();

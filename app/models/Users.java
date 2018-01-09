@@ -30,7 +30,10 @@ public class Users extends Model {
     public Transitions transition;
 
     @OneToMany(targetEntity = Books.class, cascade = CascadeType.ALL, mappedBy = "adder")
-    public List<Books> books;
+    public List<Books> booksAdded;
+
+    @OneToMany(targetEntity = Books.class, cascade = CascadeType.ALL, mappedBy = "owner")
+    public List<Books> booksOwned;
 
     public static final Finder<Long, Users> find = new Finder<>(Users.class);
 
