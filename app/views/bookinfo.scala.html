@@ -95,7 +95,7 @@
                     @for(transition <- transitionList){
                         <div class="feed-item">
                             <div class="date">@transition.wishDate</div>
-                            <div class="text"></a></div>
+                            <div class="text">@transition.currentOwnerId send @transition.book.get(0).name to @transition.book.get(0).owner.name</a></div>
                         </div>
 
                     }

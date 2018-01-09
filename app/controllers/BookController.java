@@ -167,6 +167,33 @@ public class BookController extends Controller {
         }
         return redirect(routes.HomeController.me());
     }
+    public Result bookArrived(){
+        Users currentUser = sessionController.findUserWithSession("connected");
+        DynamicForm dynamicForm = formFactory.form().bindFromRequest();
+        String bookId = dynamicForm.get("book_id");
+        String transitionId = dynamicForm.get("transition_id");
+        Transitions transition = Transitions.find.byId(Long.parseLong(transitionId));
+        Books wishedBook = Books.find.byId(Long.parseLong(bookId));
+        if(transition.isAccepted){
+            transition.isArrived = true;
+            wishedBook.owner = currentUser;
+            wishedBook.isAvailable = false;
+            wishedBook.save();
+            transition.save();
+        }
+        return redirect(routes.HomeController.me());
+    }
+
+    public Result bookShipped(){
+        Users currentUser = sessionController.findUserWithSession("connected");
+        DynamicForm dynamicForm = formFactory.form().bindFromRequest();
+        String transitionId = dynamicForm.get("transition_id");
+        Transitions transition = Transitions.find.byId(Long.parseLong(transitionId));
+
+        transition.isAccepted = true;
+        transition.save();
+        return redirect(routes.HomeController.me());
+    }
 
     public Result takeBackWish() {
         Users currentUser = sessionController.findUserWithSession("connected");

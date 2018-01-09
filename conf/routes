@@ -30,3 +30,5 @@ POST    /delete-wish                controllers.BookController.takeBackWish()
 
 GET     /about                      controllers.HomeController.about
 GET     /test                       controllers.BookController.test
+POST    /bookArrived                controllers.BookController.bookArrived()
+POST    /bookShipped                controllers.BookController.bookShipped()
