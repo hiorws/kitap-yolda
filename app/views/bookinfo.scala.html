@@ -1,5 +1,5 @@
 @import helper._
-@(book: Books)(user: Users)(notWishedYet: Boolean)
+@(book: Books)(user: Users)(notWishedYet: Boolean)(transitionList: List[Transitions])
 
 @main("Kitap Bilgileri")(user) {
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/transition.css")">
@@ -92,10 +92,10 @@
 
 
                 <div class="activity-feed">
-                    @for(i <- 0 to 20){
+                    @for(transition <- transitionList){
                         <div class="feed-item">
-                            <div class="date">Sep 25</div>
-                            <div class="text">Responded to need <a href="single-need.php">“Volunteer opportunity”</a></div>
+                            <div class="date">@transition.wishDate</div>
+                            <div class="text"></a></div>
                         </div>
 
                     }

@@ -100,9 +100,11 @@ public class BookController extends Controller {
     public Result getBookPage(Long bookID){
         Books book = Books.find.byId(bookID);
         Users currentUser = sessionController.findUserWithSession("connected");
+        Query<Transitions> query = Ebean.createQuery(Transitions.class);
+        List<Transitions> transitionList = query.where(Expr.and(Expr.eq("book", book), Expr.eq("isAccepted", true))).findList();
         if (currentUser != null){
             if(book != null){
-                return ok(bookinfo.render(book, currentUser, checkIfAlreadyWished(book)));
+                return ok(bookinfo.render(book, currentUser, checkIfAlreadyWished(book), transitionList));
             }
             else{
                 return ok(home.render());
