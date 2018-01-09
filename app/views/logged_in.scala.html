@@ -1,6 +1,6 @@
 @import helper._
 @import java.util
-@(user: Users)(transitions: List[Transitions])(bookList: List[Books])
+@(user: Users)(transitions: List[Transitions])(bookList: List[Books])(myOpenBooks: List[Books])
 @*(bookMap: util.HashMap[Books, Users])*@
 @jsFileWithExtension(id: Long) = @{
     "demo" + id
@@ -16,9 +16,10 @@
             <div class="col-sm-3"><!--left col-->
 
                 <ul class="list-group">
-                    <li class="list-group-item text-muted">Profil</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
-                        İsim</strong></span> @user.username</li>
+                        Profil</strong></span> @user.username</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>
+                        İsim</strong></span> @user.name</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
                         Mail</strong></span> @user.email</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>
@@ -31,10 +32,10 @@
             <div class="col-sm-9">
 
                 <ul class="nav nav-tabs" id="myTab">
-                    <li class="active"><a href="#home" data-toggle="tab">Açıktaki Kitaplarım</a></li>
-                    <li><a href="#messages" data-toggle="tab">İstekte Bulunduklarım</a></li>
-                    <li><a href="#from-me" data-toggle="tab">Benden İstenenler</a></li>
-                    <li><a href="#settings" data-toggle="tab">Kitap Ekle</a></li>
+                    <li class="active"><a href="#home" data-toggle="tab">Açıktaki Kitaplarım (@myOpenBooks.size())</a></li>
+                    <li><a href="#messages" data-toggle="tab">İstekte Bulunduklarım (@transitions.size())</a></li>
+                    <li><a href="#from-me" data-toggle="tab">Benden İstenenler (@bookList.size())</a></li>
+                    <li><a href="#settings" data-toggle="tab">Kitap Ekle (+)</a></li>
 
                 </ul>
 
@@ -44,8 +45,8 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Kitap Adi</th>
-                                        <th>Yazari</th>
+                                        <th>Kitap Adı</th>
+                                        <th>Yazarı</th>
                                         <th>ISBN</th>
                                         <th>Eklenme Tarihi</th>
                                         <th>Uygunluk</th>
@@ -53,7 +54,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="items">
-                                @for(book <- user.booksAdded) {
+                                @for(book <- myOpenBooks) {
                                     <tr data-toggle="collapse" data-target="#@jsFileWithExtension(book.id)" class="accordion-toggle ">
                                         <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</a></td>
                                         <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></td>

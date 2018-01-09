@@ -68,7 +68,9 @@ public class HomeController extends Controller {
                     Logger.info(Boolean.toString(b));
                     bookList = queryBooks.where(Expr.in("transition", transitionList)).findList();
                 }
-                return ok(logged_in.render(loginUser, getmyWishList(), bookList));
+                queryBooks = Ebean.createQuery(Books.class);
+                List<Books> myOpenbooks = queryBooks.where(Expr.eq("owner", loginUser)).findList();
+                return ok(logged_in.render(loginUser, getmyWishList(), bookList, myOpenbooks));
             }
             return ok(home.render());
         }
