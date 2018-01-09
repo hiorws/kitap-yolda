@@ -29,3 +29,4 @@ POST    /wish-book                  controllers.BookController.wishBook()
 POST    /delete-wish                controllers.BookController.takeBackWish()
 
 GET     /about                      controllers.HomeController.about
+GET     /test                       controllers.BookController.test

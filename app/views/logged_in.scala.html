@@ -1,5 +1,6 @@
 @import helper._
-@(user: Users)(transitions: List[Transitions])
+@import java.util
+@(user: Users)(transitions: List[Transitions])(bookMap: util.HashMap[Books, Users])
 @jsFileWithExtension(id: Long) = @{
     "demo" + id
 }
@@ -144,16 +145,13 @@
                                     </tr>
                                 </thead>
                                 <tbody id="items">
-                                @for(transition <- transitions){
-                                    @for(book <- transition.book ) {
-                                        <tr>
-                                            <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</a></td>
-                                            <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a></td>
-                                            <td>@book.adder.name</td>
-                                            <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td>
-                                        </tr>
-                                    }
-                                }
+
+                                            <tr>
+                                                <td>-----------</td>
+                                                <td>-----------</td>
+                                                <td>-----------</td>
+                                                <td>-----------</td>
+                                            </tr>
 
                                 </tbody>
                             </table>

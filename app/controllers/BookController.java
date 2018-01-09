@@ -11,13 +11,18 @@ import play.data.DynamicForm;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
+import sun.rmi.runtime.Log;
 import views.html.bookinfo;
 import views.html.books;
 import views.html.home;
+import views.html.test;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class BookController extends Controller {
     private SessionController sessionController;
@@ -178,17 +183,44 @@ public class BookController extends Controller {
         return redirect(routes.HomeController.me());
     }
 
-    // TODO : refactor this function against to list the wished books by user id
-    public List<Transitions> wishedBooksById(Long id) {
-        Users user = Users.find.byId(id);
-        Query<Transitions> query = Ebean.createQuery(Transitions.class);
+    public Result test() {
+        Logger.info("TEST FUNCTION CALLED");
+        Users currentUser = sessionController.findUserWithSession("connected");
 
-        query.where(
-                Expr.or(Expr.eq("wisher", user),
-                        Expr.eq("wisher", user))
-        );
-        List<Transitions> bookList = query.findList();
-        return bookList;
+        HashMap<Books, Users> bookAndUsersHM = new HashMap<Books, Users>();
+
+        // List<Transitions> tl = wishedBooksById(Long.parseLong("1"));
+
+        Query<Books> queryBookList= Ebean.createQuery(Books.class);
+        queryBookList.where(
+                Expr.eq("adder", currentUser));
+        List<Books> usersBookList = queryBookList.findList();
+
+        for(Books currentBook: usersBookList){
+            // Logger.info(currentBook.name);
+            Query<Transitions> queryTransition = Ebean.createQuery(Transitions.class);
+            List<Transitions> transitionsList = queryTransition.where(
+                    Expr.eq("book", currentBook)
+            ).findList();
+
+            for(Transitions t: transitionsList) {
+                for(Users wisher: t.wisher){
+                    Logger.info("BOOK NAME: " + currentBook.name +  " WISHER NAME: " + wisher.name);
+                    bookAndUsersHM.put(currentBook, wisher);
+                    // Logger.info(wisher.name);
+                }
+            }
+        }
+
+
+//        Logger.info("Context of the Books and Wishers");
+//        Set<Map.Entry<Books, Users>> hashSet = bookAndUsersHM.entrySet();
+//        for(Map.Entry entry:hashSet ) {
+//
+//            System.out.println("Book="+entry.getKey().+", Wisher="+entry.getValue());
+//        }
+
+        return ok(test.render(currentUser));
     }
 
 }

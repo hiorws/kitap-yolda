@@ -18,6 +18,7 @@ import views.html.logged_in;
 import views.html.users;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeController extends Controller {
@@ -58,8 +59,8 @@ public class HomeController extends Controller {
         public Result me(){
             Users loginUser = sessionController.findUserWithSession("connected");
             if(loginUser != null){
-
-                return ok(logged_in.render(loginUser, getmyWishList()));
+                HashMap<Books, Users> hm = wishedBooksHashMapByUserId(loginUser.id);
+                return ok(logged_in.render(loginUser, getmyWishList(), hm));
             }
             return ok(home.render());
         }
@@ -153,7 +154,8 @@ public class HomeController extends Controller {
     public Result home() {
         Users loginUser = sessionController.findUserWithSession("connected");
         if(loginUser != null){
-            return ok(logged_in.render(loginUser, getmyWishList()));
+            // return ok(logged_in.render(loginUser, getmyWishList()));
+            return redirect(routes.HomeController.me());
         }
         else{
             return ok(home.render());
@@ -174,6 +176,34 @@ public class HomeController extends Controller {
         Users loginUser = sessionController.findUserWithSession("connected");
         return ok(about.render(loginUser));
 
+    }
+
+    public HashMap<Books, Users> wishedBooksHashMapByUserId(Long userId) {
+        HashMap<Books, Users> bookAndUsersHM = new HashMap<Books, Users>();
+
+        Users user = Users.find.byId(userId);
+
+        Query<Books> queryBookList= Ebean.createQuery(Books.class);
+        queryBookList.where(
+                Expr.eq("adder", user));
+        List<Books> usersBookList = queryBookList.findList();
+
+        for(Books currentBook: usersBookList){
+            // Logger.info(currentBook.name);
+            Query<Transitions> queryTransition = Ebean.createQuery(Transitions.class);
+            List<Transitions> transitionsList = queryTransition.where(
+                    Expr.eq("book", currentBook)
+            ).findList();
+
+            for(Transitions t: transitionsList) {
+                for(Users wisher: t.wisher){
+                    Logger.info("BOOK NAME: " + currentBook.name +  " WISHER NAME: " + wisher.name);
+                    bookAndUsersHM.put(currentBook, wisher);
+                    // Logger.info(wisher.name);
+                }
+            }
+        }
+        return bookAndUsersHM;
     }
 
     // TODO add a user profile screen to see other users profile and reputation
