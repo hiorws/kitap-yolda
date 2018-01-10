@@ -214,7 +214,7 @@
                                                                 <td>@book.name</td>
                                                                 <td>@book.author</td>
 
-                                                                @if(trans.state == 0) {
+                                                                @if(trans.state != 0) {
                                                                     <td><input type="submit" class="btn btn-danger disabled" value="Alıcı Adresini Gör" disabled></input></td>
 
                                                                 }else{
@@ -239,7 +239,7 @@
                                                                     <input type="hidden" name="transition_id" value="@trans.id"></input>
 
                                                                 </form>
-                                                                @if(trans.state == 1) {
+                                                                @if(trans.state != 0) {
                                                                     <form id="cant-change" action="" method="get" role="form" style="display: block;">
                                                                         <td> <input type="submit" name="cant-change" id="change-wish-form" class="btn btn-success disabled" value="Gönderildi" disabled>
                                                                         </input></td>
