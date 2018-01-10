@@ -175,8 +175,9 @@ public class BookController extends Controller {
         Transitions transition = Transitions.find.byId(Long.parseLong(transitionId));
         Books wishedBook = Books.find.byId(Long.parseLong(bookId));
         if(transition.isOwnerAccepted){
+            transition.wisherList.remove(transition.receiver);
             transition.isArrived = true;
-            wishedBook.owner = currentUser;
+            wishedBook.owner = transition.receiver;
             wishedBook.isAvailable = false;
             wishedBook.save();
             transition.save();
@@ -201,15 +202,12 @@ public class BookController extends Controller {
 
         Books searchBook = Books.find.byId(Long.parseLong(bookId));
         Query<Transitions> query = Ebean.createQuery(Transitions.class);
-        List<Transitions> transitionsList = query.where(
-                    Expr.and(Expr.eq("wisherList", currentUser),
-                    Expr.eq("book", searchBook))).findList();
-
-        for(Transitions t: transitionsList){
-            searchBook.transition.remove(t);
-            t.delete();
+        List<Transitions> transitionList = Transitions.find.query().where(Expr.and(
+                Expr.eq("book", searchBook), Expr.eq("receiver", currentUser))).findList();
+        for (Transitions transition : transitionList){
+            searchBook.transition.remove(transition);
+            transition.delete();
         }
-
 
         return redirect(routes.HomeController.me());
     }
