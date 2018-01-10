@@ -8,6 +8,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/*
+state:
+0 -> idle
+1 -> send to wisher
+
+ */
 @Entity
 public class Transitions extends Model {
 /*
@@ -43,13 +49,14 @@ public class Transitions extends Model {
     public Books book;
 
     @Constraints.Required
-    public boolean isArrived;
+    public int state;
+
+    @Constraints.Required
+    public boolean transitionIsActive;
 
     @ManyToMany(cascade = CascadeType.ALL)
     public List<Users> wisherList;
 
-    @Constraints.Required
-    public boolean isOwnerAccepted;
 
     @Constraints.Required
     public LocalDate shipDate;
@@ -59,5 +66,23 @@ public class Transitions extends Model {
 
     public static final Finder<Long, Transitions> find = new Finder<>(Transitions.class);
 
+    @Override
+    public boolean equals(Object object)
+    {
+        boolean isEqual= false;
+
+        if (object != null && object instanceof Transitions)
+        {
+            isEqual = (this.id == ((Transitions) object).id);
+        }
+
+        return isEqual;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = (int) (this.id * 17);
+        return hashCode;
+    }
 
 }

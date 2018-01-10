@@ -121,61 +121,68 @@
                                     </tr>
                                 </thead>
                                 <tbody id="items">
-                                    @for(transition <- transitions){
-                                            <tr>
-                                                <td><a href="@routes.BookController.getBookPage(transition.book.id)">@transition.book.name</a></td>
-                                                <td><a href="@routes.BookController.getBooksByAuthor(transition.book.author)">@transition.book.author</a></td>
-                                                <td>@transition.book.adder.name</td>
-                                                <form id="change-wish-form" action="@routes.BookController.takeBackWish()" method="post" role="form" style="display: block;">
-                                                    @CSRF.formField
-                                                    @{
-                                                        if(transition.book.isAvailable){
-                                                            if(transition.book.owner.id != user.id) {
-                                                                if(!transition.isOwnerAccepted){
-                                                                        <td> <input type="submit" name="wish-submit" id="change-wish-form" class="btn btn-warning" value="Vazgeç">
-                                                                        </input></td>
-                                                                }
-                                                                else{
-                                                                        <td>Bu kitap yolda.</td>
-                                                                }
+                                    @for(transition <- transitions) {
+                                        @transition.transitionIsActive
+                                        @if(transition.transitionIsActive){
+                                        <tr>
+                                            <td><a href="@routes.BookController.getBookPage(transition.book.id)">@transition.book.name</a></td>
+                                            <td><a href="@routes.BookController.getBooksByAuthor(transition.book.author)">@transition.book.author</a></td>
+                                            <td>@transition.book.adder.name</td>
+                                            <form id="change-wish-form" action="@routes.BookController.takeBackWish()" method="post" role="form" style="display: block;">
+                                                @CSRF.formField
 
-                                                            }
-                                                            else {
+                                                @if(transition.state == 0 && !transition.book.owner.equals(user)) {
+                                                    <td>
+                                                        <input type="submit" name="wish-submit" id="change-wish-form" class="btn btn-warning" value="Vazgeç">
+                                                        </input>
+                                                    </td>
+                                                }
 
-                                                            }
-                                                        }
-                                                        else{
-                                                            <td>Bu kitap artık sizin.</td>
-                                                        }
-                                                    }
-                                                <input type="hidden" name="book_id" value="@transition.book.id"></input>
+                                                @if(transition.state == 1) {
+                                                    @if(transition.book.owner.id != user.id) {
+                                                        <td>Bu kitap yolda.</td>
 
-                                                </form>
-                                                <form id="update-isArrived-status" action="@routes.BookController.bookArrived()" method="post" role="form" style="display: block;">
-                                                    @CSRF.formField
-                                                    @{
-                                                                if(transition.book.owner.id != user.id){
-                                                                        <td> <input type="submit" name="wish-submit" id="update-isArrived-status" class="btn btn-success" value="Onayla">
-                                                                        </input></td>
-                                                                }
-
-
-                                                    }
-                                                <input type="hidden" name="book_id" value="@transition.book.id"></input>
-                                                <input type="hidden" name="transition_id" value="@transition.id"></input>
-
-                                                </form>
-                                                @if(transition.book.owner.id == user.id){
-                                                    @if(transition.book.adder.id != user.id){
-                                                        <form id="cant-change" action="" method="get" role="form" style="display: block;">
-                                                            <td> <input type="submit" name="cant-change" id="change-wish-form" class="btn btn-success disabled" value="Ulaştı" disabled>
-                                                            </input></td>
-
-                                                        </form>
                                                     }
                                                 }
-                                            </tr>
+
+                                                @if(transition.book.owner.equals(user) && transition.state == 0) {
+                                                    <td>Bu kitap artık sizin.</td>
+
+                                                }
+
+
+                                            <input type="hidden" name="book_id" value="@transition.book.id"></input>
+                                            <input type="hidden" name="transition_id" value="@transition.id"></input>
+
+                                            </form>
+                                            <form id="update-isArrived-status" action="@routes.BookController.bookArrived()" method="post" role="form" style="display: block;">
+                                                @CSRF.formField
+                                                @{
+                                                    if(transition.book.owner.id != user.id) {
+                                                            <td>
+                                                            <input type="submit" name="wish-submit" id="update-isArrived-status" class="btn btn-success" value="Onayla">
+                                                            </input>
+                                                            </td>
+                                                    }
+
+
+                                                }
+                                            <input type="hidden" name="book_id" value="@transition.book.id"></input>
+                                            <input type="hidden" name="transition_id" value="@transition.id"></input>
+
+                                            </form>
+                                            @if(transition.book.owner.id == user.id) {
+                                                @if(transition.book.adder.id != user.id) {
+                                                    <form id="cant-change" action="" method="get" role="form" style="display: block;">
+                                                        <td> <input type="submit" name="cant-change" id="change-wish-form" class="btn btn-success disabled" value="Ulaştı" disabled>
+                                                        </input></td>
+
+                                                    </form>
+                                                }
+                                            }
+                                        </tr>
                                         }
+                                    }
                                     }
 
                                 </tbody>
@@ -207,10 +214,10 @@
                                                     <tr>
                                                         <td>@book.name</td>
                                                         <td>@book.author</td>
-                                                        @if(!trans.isOwnerAccepted){
+                                                        @if(trans.state != 1){
                                                             <td><input type="submit" class="btn btn-success" value="Alıcı Adresini Gör"></input></td>
                                                         }
-                                                        @if(trans.isOwnerAccepted){
+                                                        @if(trans.state == 1){
                                                             <td><input type="submit" class="btn btn-danger disabled" value="Alıcı Adresini Gör" disabled></input></td>
 
                                                         }
@@ -218,7 +225,7 @@
                                                         <form id="update-shipped-status" action="@routes.BookController.bookShipped()" method="post" role="form" style="display: block;">
                                                             @CSRF.formField
                                                             @{
-                                                                    if(book.owner.id == user.id && !trans.isOwnerAccepted){
+                                                                    if(book.owner.id == user.id && trans.state != 1){
                                                                             <td> <input type="submit" name="wish-submit" id="update-shipped-status" class="btn btn-success" value="Kitabı Gönder">
                                                                             </input></td>
 
@@ -228,7 +235,7 @@
                                                         <input type="hidden" name="transition_id" value="@trans.id"></input>
 
                                                         </form>
-                                                        @if(trans.isOwnerAccepted){
+                                                        @if(trans.state == 1){
                                                                 <form id="cant-change" action="" method="get" role="form" style="display: block;">
                                                                     <td> <input type="submit" name="cant-change" id="change-wish-form" class="btn btn-success disabled" value="Gönderildi" disabled>
                                                                     </input></td>
