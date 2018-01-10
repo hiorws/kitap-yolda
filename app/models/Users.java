@@ -32,9 +32,31 @@ public class Users extends Model {
     @OneToMany(targetEntity = Books.class, cascade = CascadeType.ALL, mappedBy = "adder")
     public List<Books> booksAdded;
 
+    @OneToMany(targetEntity = Transitions.class, cascade = CascadeType.ALL, mappedBy = "currentOwner")
+    public List<Transitions> ownedTransitions;
+
     @OneToMany(targetEntity = Books.class, cascade = CascadeType.ALL, mappedBy = "owner")
     public List<Books> booksOwned;
 
     public static final Finder<Long, Users> find = new Finder<>(Users.class);
+
+    @Override
+    public boolean equals(Object object)
+    {
+        boolean isEqual= false;
+
+        if (object != null && object instanceof Users)
+        {
+            isEqual = (this.id == ((Users) object).id);
+        }
+
+        return isEqual;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = (int) (this.id * 17);
+        return hashCode;
+    }
 
 }

@@ -152,12 +152,11 @@
                                                 <form id="update-isArrived-status" action="@routes.BookController.bookArrived()" method="post" role="form" style="display: block;">
                                                     @CSRF.formField
                                                     @{
-                                                            if(book.adder.id != user.id) {
                                                                 if(book.owner.id != user.id){
                                                                         <td> <input type="submit" name="wish-submit" id="update-isArrived-status" class="btn btn-success" value="Onayla">
                                                                         </input></td>
                                                                 }
-                                                            }
+
 
                                                     }
                                                 <input type="hidden" name="book_id" value="@book.id"></input>
@@ -193,6 +192,7 @@
                                         <th>Talep Edenin Kullanıcının Adresi</th>
                                         <th>Isteyen Adı</th>
                                         <th>İsteği Onayla</th>
+                                        <th>Kitabın Şu an sahibi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="items">
@@ -200,6 +200,8 @@
                                         @for(book <- bookList){
                                             @for(trans <- book.transition){
                                                 @for(wisher <- trans.wisher){
+                                                    @if(wisher.name != user.name){
+
                                                     <tr>
                                                         <td>@book.name</td>
                                                         <td>@book.author</td>
@@ -214,7 +216,7 @@
                                                         <form id="update-shipped-status" action="@routes.BookController.bookShipped()" method="post" role="form" style="display: block;">
                                                             @CSRF.formField
                                                             @{
-                                                                if(book.adder.id == user.id) {
+                                                                if(book.adder.id != user.id) {
                                                                     if(book.owner.id == user.id && !trans.isAccepted){
                                                                             <td> <input type="submit" name="wish-submit" id="update-shipped-status" class="btn btn-success" value="Kitabı Gönder">
                                                                             </input></td>
@@ -233,12 +235,14 @@
                                                                 </form>
 
                                                         }
+                                                        <td>@book.owner.name</td>
                                                     </tr>
                                                 }
 
                                             }
 
                                         }
+                                    }
                                     }
 
 

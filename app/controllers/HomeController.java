@@ -61,19 +61,15 @@ public class HomeController extends Controller {
 
                     Logger.info("Here");
 
-                    List<Transitions> transitionList = queryTransition.where(Expr.and(Expr.eq("currentOwnerId", loginUser.id),
+                    List<Transitions> transitionList = queryTransition.where(Expr.and(Expr.eq("currentOwner", loginUser),
                             Expr.isNotEmpty("wisher"))).findList();
                     boolean b = transitionList.size() > 0;
+
                 List<Books> bookList  = queryBooks.where(Expr.in("transition", transitionList)).findList();
 
                 queryBooks = Ebean.createQuery(Books.class);
                 List<Books> myOpenbooks = queryBooks.where(Expr.eq("owner", loginUser)).findList();
-                if(myOpenbooks.size() > 0){
-                    Logger.info("myOpenBooks");
-                }
-                if(bookList.size() > 0){
-                    Logger.info("bookList");
-                }
+
                 return ok(logged_in.render(loginUser, getmyWishList(), bookList, myOpenbooks));
             }
             return ok(home.render());

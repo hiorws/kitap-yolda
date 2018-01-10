@@ -104,7 +104,7 @@ public class BookController extends Controller {
         List<Transitions> transitionList = query.where(Expr.and(Expr.eq("book", book), Expr.eq("isAccepted", true))).findList();
         if (currentUser != null){
             if(book != null){
-                return ok(bookinfo.render(book, currentUser, checkIfAlreadyWished(book), transitionList));
+                return ok(bookinfo.render(book, currentUser, checkIfAlreadyWished(book), transitionList, ""));
             }
             else{
                 return ok(home.render());
@@ -158,7 +158,7 @@ public class BookController extends Controller {
         Books wishedBook = Books.find.byId(Long.parseLong(bookId));
         if(!currentUser.booksOwned.contains(wishedBook)){
             transition.book.add(wishedBook);
-            transition.currentOwnerId = wishedBook.owner.id;
+            transition.currentOwner = wishedBook.owner;
             transition.wisher.add(currentUser);
             transition.wishDate = LocalDate.now();
             wishedBook.transition.add(transition);

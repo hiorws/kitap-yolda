@@ -17,7 +17,7 @@ create table books (
 
 create table transitions (
   transition_id                 bigserial not null,
-  current_owner_id              bigint,
+  current_owner_users_id        bigint,
   is_arrived                    boolean default false not null,
   is_accepted                   boolean default false not null,
   arrival_date                  date,
@@ -53,6 +53,9 @@ create index ix_books_adder_users_id on books (adder_users_id);
 alter table books add constraint fk_books_owner_users_id foreign key (owner_users_id) references users (users_id) on delete restrict on update restrict;
 create index ix_books_owner_users_id on books (owner_users_id);
 
+alter table transitions add constraint fk_transitions_current_owner_users_id foreign key (current_owner_users_id) references users (users_id) on delete restrict on update restrict;
+create index ix_transitions_current_owner_users_id on transitions (current_owner_users_id);
+
 alter table transitions_books add constraint fk_transitions_books_transitions foreign key (transitions_transition_id) references transitions (transition_id) on delete restrict on update restrict;
 create index ix_transitions_books_transitions on transitions_books (transitions_transition_id);
 
@@ -73,6 +76,9 @@ drop index if exists ix_books_adder_users_id;
 
 alter table if exists books drop constraint if exists fk_books_owner_users_id;
 drop index if exists ix_books_owner_users_id;
+
+alter table if exists transitions drop constraint if exists fk_transitions_current_owner_users_id;
+drop index if exists ix_transitions_current_owner_users_id;
 
 alter table if exists transitions_books drop constraint if exists fk_transitions_books_transitions;
 drop index if exists ix_transitions_books_transitions;

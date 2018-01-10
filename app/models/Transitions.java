@@ -21,8 +21,9 @@ public class Transitions extends Model {
     @ManyToMany(cascade = CascadeType.ALL)
     public List<Users> wisher;
 
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Users.class)
     @Constraints.Required
-    public Long currentOwnerId;
+    public Users currentOwner;
 
     @Constraints.Required
     public boolean isArrived;
