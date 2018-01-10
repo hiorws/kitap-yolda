@@ -225,7 +225,7 @@
                                                                 <form id="update-shipped-status" action="@routes.BookController.bookShipped()" method="post" role="form" style="display: block;">
                                                                     @CSRF.formField
                                                                     @{
-                                                                        if(book.owner.id == user.id && trans.state != 1) {
+                                                                        if(book.owner.id == user.id && trans.state != 0) {
                                                                                 <td>
                                                                                 <input type="submit" name="wish-submit" id="update-shipped-status" class="btn btn-success" value="Kitabı Gönder">
                                                                                 </input>
