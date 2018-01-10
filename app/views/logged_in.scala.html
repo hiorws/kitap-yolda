@@ -207,50 +207,52 @@
                                 <tbody id="items">
                                     @if(bookList != null){
                                         @for(book <- bookList){
-                                            @for(trans <- book.transition){
-                                                @for(wisher <- trans.wisherList){
-                                                    @if(wisher.name != user.name){
-
-                                                    <tr>
-                                                        <td>@book.name</td>
-                                                        <td>@book.author</td>
-                                                        @if(trans.state != 1){
-                                                            <td><input type="submit" class="btn btn-success" value="Alıcı Adresini Gör"></input></td>
-                                                        }
-                                                        @if(trans.state == 1){
-                                                            <td><input type="submit" class="btn btn-danger disabled" value="Alıcı Adresini Gör" disabled></input></td>
-
-                                                        }
-                                                        <td>@wisher.name</td>
-                                                        <form id="update-shipped-status" action="@routes.BookController.bookShipped()" method="post" role="form" style="display: block;">
-                                                            @CSRF.formField
-                                                            @{
-                                                                    if(book.owner.id == user.id && trans.state != 1){
-                                                                            <td> <input type="submit" name="wish-submit" id="update-shipped-status" class="btn btn-success" value="Kitabı Gönder">
-                                                                            </input></td>
+                                            @for(trans <- book.transition) {
+                                                @for(wisher <- trans.wisherList) {
+                                                    @if(wisher.name != user.name) {
+                                                        @if(trans.transitionIsActive) {
+                                                            <tr>
+                                                                <td>@book.name</td>
+                                                                <td>@book.author</td>
+                                                                @if(trans.state != 1) {
+                                                                    <td><input type="submit" class="btn btn-success" value="Alıcı Adresini Gör"></input></td>
+                                                                }
+                                                                @if(trans.state == 1) {
+                                                                    <td><input type="submit" class="btn btn-danger disabled" value="Alıcı Adresini Gör" disabled></input></td>
 
                                                                 }
+                                                                <td>@wisher.name</td>
+                                                                <form id="update-shipped-status" action="@routes.BookController.bookShipped()" method="post" role="form" style="display: block;">
+                                                                    @CSRF.formField
+                                                                    @{
+                                                                        if(book.owner.id == user.id && trans.state != 1) {
+                                                                                <td>
+                                                                                <input type="submit" name="wish-submit" id="update-shipped-status" class="btn btn-success" value="Kitabı Gönder">
+                                                                                </input>
+                                                                                </td>
 
-                                                            }
-                                                        <input type="hidden" name="transition_id" value="@trans.id"></input>
+                                                                        }
 
-                                                        </form>
-                                                        @if(trans.state == 1){
-                                                                <form id="cant-change" action="" method="get" role="form" style="display: block;">
-                                                                    <td> <input type="submit" name="cant-change" id="change-wish-form" class="btn btn-success disabled" value="Gönderildi" disabled>
-                                                                    </input></td>
+                                                                    }
+                                                                    <input type="hidden" name="transition_id" value="@trans.id"></input>
 
                                                                 </form>
+                                                                @if(trans.state == 1) {
+                                                                    <form id="cant-change" action="" method="get" role="form" style="display: block;">
+                                                                        <td> <input type="submit" name="cant-change" id="change-wish-form" class="btn btn-success disabled" value="Gönderildi" disabled>
+                                                                        </input></td>
 
+                                                                    </form>
+
+                                                                }
+                                                                <td>@book.owner.name</td>
+                                                            </tr>
                                                         }
-                                                        <td>@book.owner.name</td>
-                                                    </tr>
+
+                                                    }
+
                                                 }
-
                                             }
-
-                                        }
-
                                     }
 
 
