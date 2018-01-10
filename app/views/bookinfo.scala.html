@@ -73,20 +73,6 @@
                     <button class="btn btn-block btn-danger disabled" type="submit"> İste </button>
                     }
                 }
-                <form id="change-wish-form" action="@routes.BookController.takeBackWish()" method="post" role="form" style="display: block;">
-                    @CSRF.formField
-                    @{
-                        if(book.isAvailable && !notWishedYet){
-                            if(book.owner.id != user.id) {
-                                    <input type="submit" name="wish-submit" id="change-wish-form" class="btn btn-block btn-warning active" value="Vazgeç">
-                                    </input>
-                            }
-                        }
-                    }
-                    <input type="hidden" name="book_id" value="@book.id"></input>
-
-
-                </form>
 
             </div>
             <div class="col-md-9">

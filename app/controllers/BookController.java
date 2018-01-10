@@ -108,7 +108,7 @@ public class BookController extends Controller {
         Query<Transitions> query = Ebean.createQuery(Transitions.class);
         List<Transitions> transitionList = Transitions.find.query().where(Expr.and(Expr.and(
                 Expr.eq("book", book), Expr.eq("transitionIsActive", true)),
-                Expr.eq("state", 1))).findList();
+                Expr.eq("state", 0))).findList();
         if (currentUser != null){
             if(book != null){
                 return ok(bookinfo.render(book, currentUser, checkIfAlreadyWished(book), transitionList));

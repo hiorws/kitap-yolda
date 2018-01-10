@@ -122,7 +122,6 @@
                                 </thead>
                                 <tbody id="items">
                                     @for(transition <- transitions) {
-                                        @transition.transitionIsActive
                                         @if(transition.transitionIsActive){
                                         <tr>
                                             <td><a href="@routes.BookController.getBookPage(transition.book.id)">@transition.book.name</a></td>
