@@ -20,8 +20,8 @@ create table transitions (
   sender_users_id               bigint,
   receiver_users_id             bigint,
   book_book_index               bigint,
-  is_arrived                    boolean default false not null,
-  is_owner_accepted             boolean default false not null,
+  state                         integer not null,
+  transition_is_active          boolean default false not null,
   ship_date                     date,
   wish_date                     date,
   constraint pk_transitions primary key (transition_id)

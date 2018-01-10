@@ -90,8 +90,12 @@ public class BookController extends Controller {
         Users currentUser = sessionController.findUserWithSession("connected");
         Query<Transitions> query = Ebean.createQuery(Transitions.class);
         List<Transitions> transitions = query.where(
-                Expr.and(Expr.eq("wisherList", currentUser),
-                        Expr.eq("book", book))).findList();
+                Expr.and(Expr.and(Expr.eq("wisherList", currentUser),
+                        Expr.eq("book", book)),
+                        Expr.eq("transitionIsActive", true))).findList();
+        for(Transitions t : transitions){
+            Logger.info(t.book.name);
+        }
         return transitions.size() < 1;
     }
 
@@ -100,7 +104,9 @@ public class BookController extends Controller {
         Books book = Books.find.byId(bookID);
         Users currentUser = sessionController.findUserWithSession("connected");
         Query<Transitions> query = Ebean.createQuery(Transitions.class);
-        List<Transitions> transitionList = Transitions.find.query().where(Expr.eq("book", book)).findList();
+        List<Transitions> transitionList = Transitions.find.query().where(Expr.and(Expr.and(
+                Expr.eq("book", book), Expr.eq("transitionIsActive", true)),
+                Expr.eq("state", 1))).findList();
         if (currentUser != null){
             if(book != null){
                 return ok(bookinfo.render(book, currentUser, checkIfAlreadyWished(book), transitionList));
@@ -155,11 +161,12 @@ public class BookController extends Controller {
         String bookId = dynamicForm.get("book_id");
         Transitions transition = new Transitions();
         Books wishedBook = Books.find.byId(Long.parseLong(bookId));
-        if(!currentUser.booksOwned.contains(wishedBook)){
+        if(!currentUser.booksOwned.contains(wishedBook) && transition.state == 0){
             transition.book = wishedBook;
             transition.sender = wishedBook.owner;
             transition.receiver = currentUser;
             transition.wisherList.add(currentUser);
+            transition.transitionIsActive = true;
             transition.wishDate = LocalDate.now();
             wishedBook.transition.add(transition);
             transition.save();
@@ -174,11 +181,9 @@ public class BookController extends Controller {
         String transitionId = dynamicForm.get("transition_id");
         Transitions transition = Transitions.find.byId(Long.parseLong(transitionId));
         Books wishedBook = Books.find.byId(Long.parseLong(bookId));
-        if(transition.isOwnerAccepted){
-            transition.wisherList.remove(transition.receiver);
-            transition.isArrived = true;
+        if(transition.state == 1){
+            transition.state = 0;
             wishedBook.owner = transition.receiver;
-            wishedBook.isAvailable = false;
             wishedBook.save();
             transition.save();
         }
@@ -190,7 +195,8 @@ public class BookController extends Controller {
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
         String transitionId = dynamicForm.get("transition_id");
         Transitions transition = Transitions.find.byId(Long.parseLong(transitionId));
-        transition.isOwnerAccepted = true;
+        transition.wisherList.remove(transition.receiver);
+        transition.state = 1;
         transition.save();
         return redirect(routes.HomeController.me());
     }
@@ -198,15 +204,19 @@ public class BookController extends Controller {
     public Result takeBackWish() {
         Users currentUser = sessionController.findUserWithSession("connected");
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
-        String bookId = dynamicForm.get("book_id");
-
-        Books searchBook = Books.find.byId(Long.parseLong(bookId));
-        Query<Transitions> query = Ebean.createQuery(Transitions.class);
-        List<Transitions> transitionList = Transitions.find.query().where(Expr.and(
-                Expr.eq("book", searchBook), Expr.eq("receiver", currentUser))).findList();
-        for (Transitions transition : transitionList){
-            searchBook.transition.remove(transition);
-            transition.delete();
+        String transition_id = dynamicForm.get("transition_id");
+        String book_id = dynamicForm.get("book_id");
+        if(transition_id != null){
+            Transitions transitions = Transitions.find.byId(Long.parseLong(transition_id));
+            transitions.transitionIsActive = false;
+            transitions.save();
+        }
+        else{
+            Books book = Books.find.byId(Long.parseLong(book_id));
+            Transitions tr = Transitions.find.query().where(Expr.and(Expr.and(Expr.eq("book", book),
+                    Expr.eq("wisherList", currentUser)), Expr.eq("transitionIsActive", true))).findOne();
+            tr.transitionIsActive = false;
+            tr.save();
         }
 
         return redirect(routes.HomeController.me());
