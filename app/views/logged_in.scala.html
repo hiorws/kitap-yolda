@@ -32,9 +32,9 @@
             <div class="col-sm-9">
 
                 <ul class="nav nav-tabs" id="myTab">
-                    <li class="active"><a href="#home" data-toggle="tab">Açıktaki Kitaplarım (@myOpenBooks.size())</a></li>
-                    <li><a href="#messages" data-toggle="tab">İstekte Bulunduklarım (@transitions.size())</a></li>
-                    <li><a href="#from-me" data-toggle="tab">Benden İstenenler (@bookList.size())</a></li>
+                    <li class="active"><a href="#home" data-toggle="tab">Açıktaki Kitaplarım</a></li>
+                    <li><a href="#messages" data-toggle="tab">İstekte Bulunduklarım</a></li>
+                    <li><a href="#from-me" data-toggle="tab">Benden İstenenler</a></li>
                     <li><a href="#settings" data-toggle="tab">Kitap Ekle (+)</a></li>
 
                 </ul>
@@ -112,10 +112,10 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Kitap Adi</th>
-                                        <th>Yazari</th>
-                                        <th>Kitabin Ekleyen</th>
-                                        <th>Isteği İptal Et</th>
+                                        <th>Kitap Adı</th>
+                                        <th>Yazarı</th>
+                                        <th>Kitabı Ekleyen</th>
+                                        <th>İsteği İptal Et</th>
                                         <th>Kitap Elime Ulaştı</th>
 
                                     </tr>
@@ -126,7 +126,7 @@
                                         <tr>
                                             <td><a href="@routes.BookController.getBookPage(transition.book.id)">@transition.book.name</a></td>
                                             <td><a href="@routes.BookController.getBooksByAuthor(transition.book.author)">@transition.book.author</a></td>
-                                            <td>@transition.book.adder.name</td>
+                                            <td><a href="@routes.BookController.getBooksByAdder(transition.book.adder.id)">@transition.book.adder.name</a></td>
                                             <form id="change-wish-form" action="@routes.BookController.takeBackWish()" method="post" role="form" style="display: block;">
                                                 @CSRF.formField
 
@@ -195,12 +195,12 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Kitap Adi</th>
+                                        <th>Kitap Adı</th>
                                         <th>Yazari</th>
-                                        <th>Talep Edenin Kullanıcının Adresi</th>
-                                        <th>Isteyen Adı</th>
+                                        <th>Talep Edenin Adresi</th>
+                                        <th>İsteyen Kullanıcı</th>
                                         <th>İsteği Onayla</th>
-                                        <th>Kitabın Şu an sahibi</th>
+                                        <th>Kitabın Şuanki Sahibi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="items">
@@ -211,8 +211,8 @@
                                                     @if(wisher.name != user.name) {
                                                         @if(trans.transitionIsActive) {
                                                             <tr>
-                                                                <td>@book.name</td>
-                                                                <td>@book.author</td>
+                                                                <td><a href="@routes.BookController.getBookPage(book.id)">@book.name</a></td>
+                                                                <td><a href="@routes.BookController.getBooksByAuthor(book.author)">@book.author</a>></td>
 
                                                                 @if(trans.state != 0) {
                                                                     <td><input type="submit" class="btn btn-danger disabled" value="Alıcı Adresini Gör" disabled></input></td>
@@ -221,7 +221,7 @@
                                                                         <td><input type="submit" class="btn btn-success" value="Alıcı Adresini Gör"></input></td>
 
                                                                 }
-                                                                <td>@wisher.name</td>
+                                                                <td><a href="@routes.BookController.getBooksByAdder(wisher.id)">@wisher.name</a></td>
                                                                 <form id="update-shipped-status" action="@routes.BookController.bookShipped()" method="post" role="form" style="display: block;">
                                                                     @CSRF.formField
                                                                     @{
@@ -247,7 +247,7 @@
                                                                     </form>
 
                                                                 }
-                                                                <td>@book.owner.name</td>
+                                                                <td><a href="@routes.BookController.getBooksByAdder(book.owner.id)">@book.owner.name</td>
                                                             </tr>
                                                         }
 
