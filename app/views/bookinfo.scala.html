@@ -1,6 +1,6 @@
 @import helper._
 
-@(book: Books)(user: Users)(notWishedYet: Boolean)(transitionList: List[Transitions])(lastOwner: String)
+@(book: Books)(user: Users)(notWishedYet: Boolean)(transitionList: List[Transitions])
 
 @main("Kitap Bilgileri")(user) {
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/transition.css")">
@@ -95,23 +95,29 @@
                 <div class="activity-feed">
 
                     @for((transition, index) <- transitionList.zipWithIndex) {
-                        @if(index + 1 != transitionList.size()){
-                            <div class="feed-item">
-                                <div class="date">@transitionList(index).wishDate</div>
-                                <div class="text">@transitionList(index).currentOwner.name kitabı @transitionList(index + 1).currentOwner.name kişisine gönderdi. </div>
-                            </div>
-                        }else{
-                            <div class="feed-item">
-                            <div class="date">@transition.wishDate</div>
-                            <div class="text">@transition.currentOwner.name kitabı @transition.book.get(0).owner.name kişisine gönderdi. </div>
-                            </div>
+                        @if(transitionList.size() > 0){
+                            @if(index + 1 != transitionList.size()){
+                                <div class="feed-item">
+                                    <div class="date">@transitionList(index).wishDate</div>
+                                    <div class="text">@transitionList(index).currentOwner.name kitabı @transitionList(index + 1).currentOwner.name kişisine gönderdi. </div>
+                                </div>
+                            }else{
+                                <div class="feed-item">
+                                    <div class="date">@transition.wishDate</div>
+                                    <div class="text">@transition.currentOwner.name kitabı @transition.book.get(0).owner.name kişisine gönderdi.... </div>
+                                </div>
 
+                            }
                         }
 
+
                     }
-                    <div class="feed-item">
+                    @if(transitionList.size() > 0) {
+
+                        <div class="feed-item">
                         <div class="text">@transitionList.last.book.get(0).owner.name kitabın son sahibi.</div>
                     </div>
+                }
 
                 </div>
 
