@@ -168,8 +168,10 @@ public class HomeController extends Controller {
     public Result getAllUsers() {
         Users loginUser = sessionController.findUserWithSession("connected");
 
+        List<Users> allUsers = Users.find.all();
+
         if(loginUser != null) {
-            return ok(users.render(loginUser));
+            return ok(users.render(loginUser, allUsers));
         } else {
             return unauthorized("Oops, you are not authorized!");
         }
