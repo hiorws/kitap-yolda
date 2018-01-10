@@ -1,4 +1,67 @@
-@(user: Users)
-@main("Hey")(user){
-    <h1>@user</h1>
+@(user: Users)(allUsers: List[Users])
+@main("Kullanıcı Profili")(user){
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/profile.css")">
+
+
+
+    <div class="container">
+        @for(user <- allUsers){
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="well well-sm">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-4">
+                                <img src="@routes.Assets.versioned("images/bookworm.gif")" alt="" class="img-rounded img-responsive" />
+                            </div>
+                            <div class="col-sm-6 col-md-8">
+                                <h4>
+                                @user.name</h4>
+                                <cite title="San Francisco, USA">@user.username</cite>
+                                <p>
+                                    <i class="fa fa-envelope" aria-hidden="true"></i> @user.email
+                                    <br />
+                                    <i class="fa fa-book" aria-hidden="true"></i><a href="@routes.BookController.getBooksByAdder(user.id)"> Paylaştığı kitap sayısı: @user.booksAdded.size()</a>
+                                    <br />
+
+                                        <!-- Split button -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+
+    </div>
+    @*
+    <div class="container">
+
+        <div class="col-sm-6">
+
+            <ul class="list-group">
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong>
+                        @user.name</strong></span>
+                        <button type="submit" class="btn btn-default">Profili Düzenle</button>
+
+                </li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>
+                    Profil</strong></span> @user.username</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>
+                    İsim</strong></span> @user.name</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>
+                    Mail</strong></span> @user.email</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>
+                    Paylaştığı Kitap Sayısı</strong></span><a href="@routes.BookController.getBooksByAdder(user.id)">@user.booksAdded.size()</a></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>
+                    Adres</strong></span> İzmir Yüksek Teknoloji Enstitüsü Bilgisayar Mühendisliği Bölümü Urla / İZMİR</li>
+            </ul>
+
+        </div>
+
+    </div>
+    *@
+
 }
