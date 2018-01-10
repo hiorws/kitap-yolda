@@ -29,7 +29,7 @@ public class BookController extends Controller {
     public BookController(){
         sessionController = SessionController.getInstance();
     }
-    public void addBook(String bookName, Users bookAdder, String bookAuthor, Boolean bookAvailable, String bookIsbn) {
+    public void addBook(String bookName, Users bookAdder, String bookAuthor, Boolean bookAvailable, String bookIsbn, String bookCondition) {
         Books newBook = new Books();
         newBook.name = bookName;
         newBook.adder = bookAdder;
@@ -38,6 +38,7 @@ public class BookController extends Controller {
         newBook.isAvailable = bookAvailable;
         newBook.adder = bookAdder;
         newBook.ISBN = bookIsbn != "" ? bookIsbn : "";
+        newBook.condition = bookCondition != "" ? bookCondition : "";
         newBook.additionDate = LocalDate.now();
         // Logger.info(newBook.ISBN);
         newBook.save();
@@ -70,16 +71,17 @@ public class BookController extends Controller {
         String bookAuthor = dynamicForm.get("book_author");
         String bookName = dynamicForm.get("book_name");
         String bookIsbn = dynamicForm.get("book_isbn");
+        String bookCondition = dynamicForm.get("book_condition");
         // Logger.info(bookIsbn);
         // Logger.info(bookAvailable);
 
         Users loginUser = sessionController.findUserWithSession("connected");
         if(loginUser!= null){
             if(bookAvailable == null){
-                addBook(bookName,loginUser,bookAuthor,false,bookIsbn);
+                addBook(bookName,loginUser,bookAuthor,false,bookIsbn, bookCondition);
             }
             else{
-                addBook(bookName,loginUser,bookAuthor,true,bookIsbn);
+                addBook(bookName,loginUser,bookAuthor,true,bookIsbn, bookCondition);
             }
         }
         return redirect(routes.HomeController.me());

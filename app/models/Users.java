@@ -26,6 +26,9 @@ public class Users extends Model {
     @Constraints.Required
     public String email;
 
+    @Constraints.Required
+    public String address;
+
     @ManyToMany(mappedBy = "wisherList")
     public Transitions transition;
 

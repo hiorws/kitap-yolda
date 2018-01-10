@@ -6,6 +6,7 @@
 create table books (
   book_index                    bigserial not null,
   isbn                          varchar(255),
+  condition                     varchar(255),
   name                          varchar(255),
   is_available                  boolean default false not null,
   author                        varchar(255),
@@ -39,6 +40,7 @@ create table users (
   password                      varchar(255),
   name                          varchar(255),
   email                         varchar(255),
+  address                       varchar(255),
   constraint pk_users primary key (users_id)
 );
 

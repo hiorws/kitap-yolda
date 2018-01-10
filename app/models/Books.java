@@ -19,6 +19,9 @@ public class Books extends Model {
     @Optional
     public String ISBN;
 
+    @Optional
+    public String condition;
+
     @Constraints.Required
     public String name;
 

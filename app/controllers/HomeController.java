@@ -95,6 +95,7 @@ public class HomeController extends Controller {
         String registerConfirmPassword = dynamicForm.get("confirm-password");
         String registerEmail = dynamicForm.get("email");
         String registerName = dynamicForm.get("name");
+        String registerAddress = dynamicForm.get("address");
 
         List<Users> userList = Ebean.find(Users.class).where().eq("username", registerName).findList();
         if(userList.size() < 1){
@@ -103,6 +104,7 @@ public class HomeController extends Controller {
             newUser.password = registerPassword;
             newUser.email = registerEmail;
             newUser.name = registerName;
+            newUser.address = registerAddress;
 
             newUser.save();
             sessionController.setSession("connected", newUser.id.toString());
