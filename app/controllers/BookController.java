@@ -195,7 +195,6 @@ public class BookController extends Controller {
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
         String transitionId = dynamicForm.get("transition_id");
         Transitions transition = Transitions.find.byId(Long.parseLong(transitionId));
-        transition.wisherList.remove(transition.receiver);
         transition.state = 1;
         transition.save();
         return redirect(routes.HomeController.me());
