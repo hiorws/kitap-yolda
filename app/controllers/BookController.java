@@ -125,6 +125,13 @@ public class BookController extends Controller {
     public Result searchBook(){
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
         String searchBook = dynamicForm.get("search_parameter");
+        if(searchBook == null){
+            Query<Books> query = Ebean.createQuery(Books.class);
+            List<Books> bookList = query.findList();
+
+            return ok(books.render(bookList, sessionController.findUserWithSession("connected")));
+        }
+
 
         return redirect(routes.BookController.showFilter(searchBook));
     }
