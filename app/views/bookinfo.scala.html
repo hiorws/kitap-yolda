@@ -94,30 +94,17 @@
 
                 <div class="activity-feed">
 
-                    @for((transition, index) <- transitionList.zipWithIndex) {
+                    @for(transition <- transitionList) {
                         @if(transitionList.size() > 0){
-                            @if(index + 1 != transitionList.size()){
-                                <div class="feed-item">
-                                    <div class="date">@transitionList(index).wishDate</div>
-                                    <div class="text">@transitionList(index).currentOwner.name kitabı @transitionList(index + 1).currentOwner.name kişisine gönderdi. </div>
-                                </div>
-                            }else{
                                 <div class="feed-item">
                                     <div class="date">@transition.wishDate</div>
-                                    <div class="text">@transition.currentOwner.name kitabı @transition.book.get(0).owner.name kişisine gönderdi.... </div>
+                                    <div class="text">@transition.sender.name kitabı @transition.receiver.name kişisine gönderdi. </div>
                                 </div>
 
-                            }
                         }
 
 
                     }
-                    @if(transitionList.size() > 0) {
-
-                        <div class="feed-item">
-                        <div class="text">@transitionList.last.book.get(0).owner.name kitabın son sahibi.</div>
-                    </div>
-                }
 
                 </div>
 

@@ -10,20 +10,8 @@ import java.util.List;
 
 @Entity
 public class Transitions extends Model {
+/*
 
-    @Id
-    @Column(name = "transition_id")
-    public Long id;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    public List<Books> book;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    public List<Users> wisher;
-
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Users.class)
-    @Constraints.Required
-    public Users currentOwner;
 
     @Constraints.Required
     public boolean isArrived;
@@ -34,11 +22,42 @@ public class Transitions extends Model {
     @Constraints.Required
     public LocalDate arrivalDate;
 
-    @Constraints.Required
-    public LocalDate wishDate;
 
     @Constraints.Required
     public LocalDate shipDate;
 
     public static final Finder<Long, Transitions> find = new Finder<>(Transitions.class);
+    */
+    @Id
+    @Column(name = "transition_id")
+    public Long id;
+
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Users.class)
+    public Users sender;
+
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Users.class)
+    @Constraints.Required
+    public Users receiver;
+
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Books.class)
+    public Books book;
+
+    @Constraints.Required
+    public boolean isArrived;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    public List<Users> wisherList;
+
+    @Constraints.Required
+    public boolean isOwnerAccepted;
+
+    @Constraints.Required
+    public LocalDate shipDate;
+
+    @Constraints.Required
+    public LocalDate wishDate;
+
+    public static final Finder<Long, Transitions> find = new Finder<>(Transitions.class);
+
+
 }

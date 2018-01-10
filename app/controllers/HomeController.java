@@ -14,11 +14,10 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.about;
 import views.html.home;
-import views.html.users;
 import views.html.logged_in;
+import views.html.users;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 
 public class HomeController extends Controller {
@@ -59,14 +58,15 @@ public class HomeController extends Controller {
                 Query<Transitions> queryTransition = Ebean.createQuery(Transitions.class);
                 Query<Books> queryBooks = Ebean.createQuery(Books.class);
 
-                    Logger.info("Here");
 
-                    List<Transitions> transitionList = queryTransition.where(Expr.and(Expr.eq("currentOwner", loginUser),
-                            Expr.isNotEmpty("wisher"))).findList();
+                    List<Transitions> transitionList =  queryTransition.where(Expr.eq("sender", loginUser)).findList();
                     boolean b = transitionList.size() > 0;
 
                 List<Books> bookList  = queryBooks.where(Expr.in("transition", transitionList)).findList();
 
+                for(Books book : bookList){
+                    Logger.info(book.name);
+                }
                 queryBooks = Ebean.createQuery(Books.class);
                 List<Books> myOpenbooks = queryBooks.where(Expr.eq("owner", loginUser)).findList();
 
@@ -78,7 +78,7 @@ public class HomeController extends Controller {
         private List<Transitions> getmyWishList(){
             Users currentUser = sessionController.findUserWithSession("connected");
             Query<Transitions> query = Ebean.createQuery(Transitions.class);
-            List<Transitions> transitions = query.where(Expr.eq("wisher", currentUser)).findList();
+            List<Transitions> transitions = query.where(Expr.eq("wisherList", currentUser)).findList();
             return transitions;
         }
 
@@ -180,7 +180,7 @@ public class HomeController extends Controller {
         return ok(about.render(loginUser));
 
     }
-
+/*
     public HashMap<Books, Users> wishedBooksHashMapByUserId(Long userId) {
         HashMap<Books, Users> bookAndUsersHM = new HashMap<Books, Users>();
 
@@ -208,7 +208,7 @@ public class HomeController extends Controller {
         }
         return bookAndUsersHM;
     }
-
+*/
     // TODO add a user profile screen to see other users profile and reputation
 
 }
