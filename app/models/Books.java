@@ -35,7 +35,7 @@ public class Books extends Model {
     @Constraints.Required
     public Users owner;
 
-    @ManyToMany(mappedBy = "book")
+    @OneToMany(targetEntity = Transitions.class, cascade = CascadeType.ALL, mappedBy = "book")
     public List<Transitions> transition;
 
     @Constraints.Required

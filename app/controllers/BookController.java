@@ -34,7 +34,6 @@ public class BookController extends Controller {
         newBook.name = bookName;
         newBook.adder = bookAdder;
         newBook.owner = bookAdder;
-        Logger.info(bookAdder.name);
         newBook.author = bookAuthor;
         newBook.isAvailable = bookAvailable;
         newBook.adder = bookAdder;
@@ -91,7 +90,7 @@ public class BookController extends Controller {
         Users currentUser = sessionController.findUserWithSession("connected");
         Query<Transitions> query = Ebean.createQuery(Transitions.class);
         List<Transitions> transitions = query.where(
-                Expr.and(Expr.eq("wisher", currentUser),
+                Expr.and(Expr.eq("wisherList", currentUser),
                         Expr.eq("book", book))).findList();
         return transitions.size() < 1;
     }
@@ -101,7 +100,7 @@ public class BookController extends Controller {
         Books book = Books.find.byId(bookID);
         Users currentUser = sessionController.findUserWithSession("connected");
         Query<Transitions> query = Ebean.createQuery(Transitions.class);
-        List<Transitions> transitionList = query.where(Expr.and(Expr.eq("book", book), Expr.eq("isAccepted", true))).findList();
+        List<Transitions> transitionList = Transitions.find.query().where(Expr.eq("book", book)).findList();
         if (currentUser != null){
             if(book != null){
                 return ok(bookinfo.render(book, currentUser, checkIfAlreadyWished(book), transitionList));
@@ -157,9 +156,10 @@ public class BookController extends Controller {
         Transitions transition = new Transitions();
         Books wishedBook = Books.find.byId(Long.parseLong(bookId));
         if(!currentUser.booksOwned.contains(wishedBook)){
-            transition.book.add(wishedBook);
-            transition.currentOwner = wishedBook.owner;
-            transition.wisher.add(currentUser);
+            transition.book = wishedBook;
+            transition.sender = wishedBook.owner;
+            transition.receiver = currentUser;
+            transition.wisherList.add(currentUser);
             transition.wishDate = LocalDate.now();
             wishedBook.transition.add(transition);
             transition.save();
@@ -174,7 +174,7 @@ public class BookController extends Controller {
         String transitionId = dynamicForm.get("transition_id");
         Transitions transition = Transitions.find.byId(Long.parseLong(transitionId));
         Books wishedBook = Books.find.byId(Long.parseLong(bookId));
-        if(transition.isAccepted){
+        if(transition.isOwnerAccepted){
             transition.isArrived = true;
             wishedBook.owner = currentUser;
             wishedBook.isAvailable = false;
@@ -189,8 +189,7 @@ public class BookController extends Controller {
         DynamicForm dynamicForm = formFactory.form().bindFromRequest();
         String transitionId = dynamicForm.get("transition_id");
         Transitions transition = Transitions.find.byId(Long.parseLong(transitionId));
-
-        transition.isAccepted = true;
+        transition.isOwnerAccepted = true;
         transition.save();
         return redirect(routes.HomeController.me());
     }
@@ -203,7 +202,7 @@ public class BookController extends Controller {
         Books searchBook = Books.find.byId(Long.parseLong(bookId));
         Query<Transitions> query = Ebean.createQuery(Transitions.class);
         List<Transitions> transitionsList = query.where(
-                    Expr.and(Expr.eq("wisher", currentUser),
+                    Expr.and(Expr.eq("wisherList", currentUser),
                     Expr.eq("book", searchBook))).findList();
 
         for(Transitions t: transitionsList){
@@ -230,11 +229,11 @@ public class BookController extends Controller {
 
 
         Books book = Books.find.byId(2L);
-
+/*
         if(book.transition != null){
             Logger.info(book.transition.get(0).wisher.get(0).name);
         }
-
+*/
 //        Logger.info("Context of the Books and Wishers");
 //        Set<Map.Entry<Books, Users>> hashSet = bookAndUsersHM.entrySet();
 //        for(Map.Entry entry:hashSet ) {

@@ -26,14 +26,17 @@ public class Users extends Model {
     @Constraints.Required
     public String email;
 
-    @ManyToMany(mappedBy = "wisher")
+    @ManyToMany(mappedBy = "wisherList")
     public Transitions transition;
 
     @OneToMany(targetEntity = Books.class, cascade = CascadeType.ALL, mappedBy = "adder")
     public List<Books> booksAdded;
 
-    @OneToMany(targetEntity = Transitions.class, cascade = CascadeType.ALL, mappedBy = "currentOwner")
-    public List<Transitions> ownedTransitions;
+    @OneToMany(targetEntity = Transitions.class, cascade = CascadeType.ALL, mappedBy = "sender")
+    public List<Transitions> fromUserTransitions;
+
+    @OneToMany(targetEntity = Transitions.class, cascade = CascadeType.ALL, mappedBy = "receiver")
+    public List<Transitions> toUserTransitions;
 
     @OneToMany(targetEntity = Books.class, cascade = CascadeType.ALL, mappedBy = "owner")
     public List<Books> booksOwned;
